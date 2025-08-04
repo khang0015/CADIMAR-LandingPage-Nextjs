@@ -1,5 +1,5 @@
 import { ContactForm } from '@/components/contact-form';
-import LanguageSelector from '@/components/language-selector';
+import LanguageSelectorSimple from '@/components/language-selector-simple';
 
 export default function TestPage() {
   return (
@@ -19,11 +19,11 @@ export default function TestPage() {
           <h2 className="text-xl font-semibold mb-4">Language Selector Test</h2>
           <div className="flex gap-4 items-center">
             <span>Default variant:</span>
-            <LanguageSelector />
+            <LanguageSelectorSimple />
           </div>
           <div className="flex gap-4 items-center mt-4">
             <span>Compact variant:</span>
-            <LanguageSelector variant="compact" />
+            <LanguageSelectorSimple />
           </div>
         </div>
 

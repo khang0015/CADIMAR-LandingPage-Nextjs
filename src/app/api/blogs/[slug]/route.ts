@@ -3,9 +3,10 @@ import { db } from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  context: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const params = await context.params;
     const { slug } = params;
     const post = await db.getBlogPostBySlug(slug);
     
@@ -36,10 +37,11 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  context: { params: Promise<{ slug: string }> }
 ) {
   try {
     const body = await request.json();
+    const params = await context.params;
     const { slug } = params;
     
     const existingPost = await db.getBlogPostBySlug(slug);
@@ -63,9 +65,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  context: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const params = await context.params;
     const { slug } = params;
     
     const existingPost = await db.getBlogPostBySlug(slug);

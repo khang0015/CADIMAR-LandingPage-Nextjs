@@ -23,8 +23,8 @@ interface BlogPost {
 }
 
 export default function BlogsPage() {
-  const { currentLang } = useTranslations();
-  const [selectedLang, setSelectedLang] = useState(currentLang);
+  const { currentLanguage } = useTranslations();
+  const [selectedLang, setSelectedLang] = useState(currentLanguage);
 
   const { data: blogPosts = [], isLoading } = useQuery<BlogPost[]>({
     queryKey: ["/api/blogs", selectedLang],
@@ -37,7 +37,7 @@ export default function BlogsPage() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString(currentLang === 'vi' ? 'vi-VN' : 'en-US', {
+    return date.toLocaleDateString(currentLanguage === 'vi' ? 'vi-VN' : 'en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -80,10 +80,10 @@ export default function BlogsPage() {
             className="text-center"
           >
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              {currentLang === 'vi' ? 'Blog & Thông Tin' : 'Blog & Insights'}
+              {currentLanguage === 'vi' ? 'Blog & Thông Tin' : 'Blog & Insights'}
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              {currentLang === 'vi' 
+              {currentLanguage === 'vi' 
                 ? 'Khám phá những thông tin mới nhất về quảng cáo TikTok, xu hướng marketing và chiến lược phát triển thương hiệu.'
                 : 'Discover the latest insights on TikTok advertising, marketing trends, and brand growth strategies.'
               }
@@ -134,7 +134,7 @@ export default function BlogsPage() {
                       {post.featured && (
                         <Badge className="bg-brand-red text-white flex items-center space-x-1">
                           <Star className="h-3 w-3" />
-                          <span>{currentLang === 'vi' ? 'Nổi bật' : 'Featured'}</span>
+                          <span>{currentLanguage === 'vi' ? 'Nổi bật' : 'Featured'}</span>
                         </Badge>
                       )}
                       <Badge variant="outline" className="text-gray-400 border-gray-600">
@@ -167,7 +167,7 @@ export default function BlogsPage() {
                       <Button 
                         className="w-full bg-brand-red hover:bg-red-600 text-white group-hover:bg-red-600 transition-all duration-300"
                       >
-                        <span>{currentLang === 'vi' ? 'Đọc thêm' : 'Read More'}</span>
+                        <span>{currentLanguage === 'vi' ? 'Đọc thêm' : 'Read More'}</span>
                         <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </Link>
@@ -183,7 +183,7 @@ export default function BlogsPage() {
             className="text-center py-16"
           >
             <div className="text-gray-400 text-lg">
-              {currentLang === 'vi' 
+              {currentLanguage === 'vi' 
                 ? 'Chưa có bài viết nào cho ngôn ngữ này.'
                 : 'No blog posts available for this language.'
               }
@@ -197,7 +197,7 @@ export default function BlogsPage() {
         <div className="text-center">
           <Link href="/">
             <Button variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-800">
-              {currentLang === 'vi' ? '← Về trang chủ' : '← Back to Home'}
+              {currentLanguage === 'vi' ? '← Về trang chủ' : '← Back to Home'}
             </Button>
           </Link>
         </div>

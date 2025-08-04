@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
@@ -23,14 +24,20 @@ interface BlogPost {
 }
 
 interface BlogPostPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const { slug } = params;
-  const { currentLang } = useTranslations();
+  const [slug, setSlug] = useState<string>("");
+  const { currentLanguage } = useTranslations();
+
+  useEffect(() => {
+    params.then(resolvedParams => {
+      setSlug(resolvedParams.slug);
+    });
+  }, [params]);
 
   const { data: post, isLoading, error } = useQuery<BlogPost>({
     queryKey: ["/api/blogs", slug],
@@ -49,7 +56,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString(currentLang === 'vi' ? 'vi-VN' : 'en-US', {
+    return date.toLocaleDateString(currentLanguage === 'vi' ? 'vi-VN' : 'en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -87,10 +94,10 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       <div className="min-h-screen bg-dark-primary flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">
-            {currentLang === 'vi' ? 'Không tìm thấy bài viết' : 'Blog Post Not Found'}
+            {currentLanguage === 'vi' ? 'Không tìm thấy bài viết' : 'Blog Post Not Found'}
           </h1>
           <p className="text-gray-400 mb-8">
-            {currentLang === 'vi' 
+            {currentLanguage === 'vi' 
               ? 'Bài viết bạn đang tìm không tồn tại hoặc đã bị xóa.'
               : 'The blog post you are looking for does not exist or has been removed.'
             }
@@ -98,7 +105,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           <Link href="/blogs">
             <Button className="bg-brand-red hover:bg-red-600">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              {currentLang === 'vi' ? 'Về trang blog' : 'Back to Blog'}
+              {currentLanguage === 'vi' ? 'Về trang blog' : 'Back to Blog'}
             </Button>
           </Link>
         </div>
@@ -120,7 +127,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             <Link href="/blogs">
               <Button variant="ghost" className="text-gray-400 hover:text-white mb-6">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                {currentLang === 'vi' ? 'Về trang blog' : 'Back to Blog'}
+                {currentLanguage === 'vi' ? 'Về trang blog' : 'Back to Blog'}
               </Button>
             </Link>
 
@@ -129,7 +136,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
               {post.featured && (
                 <Badge className="bg-brand-red text-white flex items-center space-x-1">
                   <Star className="h-3 w-3" />
-                  <span>{currentLang === 'vi' ? 'Nổi bật' : 'Featured'}</span>
+                  <span>{currentLanguage === 'vi' ? 'Nổi bật' : 'Featured'}</span>
                 </Badge>
               )}
               <Badge variant="outline" className="text-gray-400 border-gray-600">
@@ -230,20 +237,20 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           className="mt-16 p-8 bg-dark-secondary border border-gray-800 rounded-xl text-center"
         >
           <h3 className="text-2xl font-bold text-white mb-4">
-            {currentLang === 'vi' 
+            {currentLanguage === 'vi' 
               ? 'Sẵn sàng thúc đẩy thương hiệu của bạn?' 
               : 'Ready to grow your brand?'
             }
           </h3>
           <p className="text-gray-300 mb-6">
-            {currentLang === 'vi'
+            {currentLanguage === 'vi'
               ? 'Liên hệ với chúng tôi để tìm hiểu cách chúng tôi có thể giúp bạn đạt được mục tiêu quảng cáo TikTok.'
               : 'Get in touch to learn how we can help you achieve your TikTok advertising goals.'
             }
           </p>
           <Link href="/#contact">
             <Button className="bg-brand-red hover:bg-red-600 text-white px-8">
-              {currentLang === 'vi' ? 'Liên hệ ngay' : 'Get In Touch'}
+              {currentLanguage === 'vi' ? 'Liên hệ ngay' : 'Get In Touch'}
             </Button>
           </Link>
         </motion.div>

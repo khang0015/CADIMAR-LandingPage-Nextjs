@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
@@ -21,13 +22,20 @@ interface BlogPost {
   updatedAt: string;
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const { currentLang } = useTranslations();
+export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const [slug, setSlug] = useState<string>("");
+  const { currentLanguage } = useTranslations();
+
+  useEffect(() => {
+    params.then(resolvedParams => {
+      setSlug(resolvedParams.slug);
+    });
+  }, [params]);
 
   const { data: post, isLoading, error } = useQuery<BlogPost>({
-    queryKey: ["/api/blogs", params.slug],
+    queryKey: ["/api/blogs", slug],
     queryFn: async () => {
-      const response = await fetch(`/api/blogs/${params.slug}`);
+      const response = await fetch(`/api/blogs/${slug}`);
       if (!response.ok) {
         if (response.status === 404) {
           throw new Error("Blog post not found");
@@ -36,12 +44,12 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       }
       return response.json();
     },
-    enabled: !!params.slug
+    enabled: !!slug
   });
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString(currentLang === 'vi' ? 'vi-VN' : 'en-US', {
+    return date.toLocaleDateString(currentLanguage === 'vi' ? 'vi-VN' : 'en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -74,10 +82,10 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            {currentLang === 'vi' ? 'Không tìm thấy bài viết' : 'Blog post not found'}
+            {currentLanguage === 'vi' ? 'Không tìm thấy bài viết' : 'Blog post not found'}
           </h1>
           <p className="text-gray-600 mb-8">
-            {currentLang === 'vi' 
+            {currentLanguage === 'vi' 
               ? 'Bài viết bạn đang tìm không tồn tại hoặc đã bị xóa.'
               : 'The blog post you are looking for does not exist or has been removed.'
             }
@@ -85,7 +93,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           <Link href="/blogs">
             <Button>
               <ArrowLeft className="mr-2 h-4 w-4" />
-              {currentLang === 'vi' ? 'Quay lại blog' : 'Back to Blog'}
+              {currentLanguage === 'vi' ? 'Quay lại blog' : 'Back to Blog'}
             </Button>
           </Link>
         </div>
@@ -106,7 +114,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             <Link href="/blogs">
               <Button variant="ghost" className="mb-8 hover:bg-green-100">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                {currentLang === 'vi' ? 'Quay lại blog' : 'Back to Blog'}
+                {currentLanguage === 'vi' ? 'Quay lại blog' : 'Back to Blog'}
               </Button>
             </Link>
 
@@ -115,7 +123,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                 {post.featured && (
                   <Badge className="bg-yellow-100 text-yellow-800">
                     <Star className="h-3 w-3 mr-1" />
-                    {currentLang === 'vi' ? 'Nổi bật' : 'Featured'}
+                    {currentLanguage === 'vi' ? 'Nổi bật' : 'Featured'}
                   </Badge>
                 )}
                 <Badge variant="outline">
@@ -168,13 +176,13 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           className="mt-16 p-8 bg-green-50 rounded-2xl"
         >
           <h3 className="text-2xl font-bold text-gray-900 mb-4">
-            {currentLang === 'vi' 
+            {currentLanguage === 'vi' 
               ? 'Bạn thích bài viết này?' 
               : 'Did you enjoy this article?'
             }
           </h3>
           <p className="text-gray-600 mb-6">
-            {currentLang === 'vi'
+            {currentLanguage === 'vi'
               ? 'Khám phá thêm nhiều bài viết khác về marketing TikTok và chiến lược số.'
               : 'Explore more articles about TikTok marketing and digital strategies.'
             }
@@ -182,12 +190,12 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           <div className="flex space-x-4">
             <Link href="/blogs">
               <Button className="bg-green-600 hover:bg-green-700">
-                {currentLang === 'vi' ? 'Xem thêm bài viết' : 'More Articles'}
+                {currentLanguage === 'vi' ? 'Xem thêm bài viết' : 'More Articles'}
               </Button>
             </Link>
             <Link href="/#contact">
               <Button variant="outline" className="border-green-600 text-green-600 hover:bg-green-50">
-                {currentLang === 'vi' ? 'Liên hệ tư vấn' : 'Get Consultation'}
+                {currentLanguage === 'vi' ? 'Liên hệ tư vấn' : 'Get Consultation'}
               </Button>
             </Link>
           </div>

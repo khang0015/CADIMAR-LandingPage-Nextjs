@@ -8,9 +8,40 @@ import { useTranslations } from "@/hooks/use-translations";
 import { AnimatedText, TypewriterText, CountUp } from "./animated-text";
 import TikTokPhoneMockup from "./tiktok-phone-mockup";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 export default function HeroSection() {
   const { t } = useTranslations();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Enhanced random-looking pattern with vibrant colors
+  const createRandomDots = (count: number, area: { minX: number, maxX: number, minY: number, maxY: number }) => {
+    const dots = [];
+    // Use deterministic positions based on index to avoid hydration mismatch
+    for (let i = 0; i < count; i++) {
+      const seed1 = Math.sin(i * 12.9898) * 43758.5453123;
+      const seed2 = Math.sin(i * 78.233) * 43758.5453123;
+      const randomX = (seed1 - Math.floor(seed1)) * (area.maxX - area.minX) + area.minX;
+      const randomY = (seed2 - Math.floor(seed2)) * (area.maxY - area.minY) + area.minY;
+      
+      dots.push({
+        left: randomX,
+        top: randomY,
+        delay: (i % 10) * 0.2,
+        size: 1 + (i % 3) * 0.5, // Different sizes: 1, 1.5, 2
+        intensity: 0.4 + (i % 4) * 0.2, // Different intensities
+      });
+    }
+    return dots;
+  };
+
+  const floatingDots = createRandomDots(40, { minX: 0, maxX: 100, minY: 0, maxY: 100 });
+  const accentDots = createRandomDots(15, { minX: 20, maxX: 80, minY: 20, maxY: 80 });
+  const edgeDots = createRandomDots(25, { minX: 0, maxX: 100, minY: 0, maxY: 100 });
 
   return (
     <section className="pt-16 pb-8 h-screen flex items-center bg-gradient-to-br from-white via-green-50 to-emerald-100 relative overflow-hidden">
@@ -20,216 +51,102 @@ export default function HeroSection() {
         <div className="absolute bottom-20 left-20 w-80 h-80 bg-emerald-400 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Enhanced Pixelated Dots Pattern - More Prominent */}
-      <div className="absolute inset-0">
-        {/* Top-right corner dots - More prominent */}
-        <div className="absolute top-10 right-10 w-40 h-40">
-          {[...Array(35)].map((_, i) => (
-            <motion.div
-              key={`top-right-${i}`}
-              className="absolute w-1.5 h-1.5 bg-green-500 rounded-full shadow-sm"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0.4, 1, 0.4],
-                scale: [0.6, 1.2, 0.6],
-              }}
-              transition={{
-                duration: 2 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Bottom-left corner dots - More prominent */}
-        <div className="absolute bottom-10 left-10 w-50 h-50">
-          {[...Array(45)].map((_, i) => (
-            <motion.div
-              key={`bottom-left-${i}`}
-              className="absolute w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-sm"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0.5, 1, 0.5],
-                scale: [0.7, 1.3, 0.7],
-              }}
-              transition={{
-                duration: 2.5 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Center-right dots - More prominent */}
-        <div className="absolute top-1/2 right-20 w-32 h-32">
-          {[...Array(25)].map((_, i) => (
-            <motion.div
-              key={`center-right-${i}`}
-              className="absolute w-1.5 h-1.5 bg-green-400 rounded-full shadow-sm"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0.3, 0.9, 0.3],
-                scale: [0.5, 1.1, 0.5],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 3,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Phone area dots - Much more concentrated and prominent */}
-        <div className="absolute top-1/3 right-10 w-96 h-96">
-          {[...Array(80)].map((_, i) => (
-            <motion.div
-              key={`phone-area-${i}`}
-              className="absolute w-1.5 h-1.5 bg-green-300 rounded-full shadow-sm"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0.3, 0.8, 0.3],
-                scale: [0.4, 0.9, 0.4],
-              }}
-              transition={{
-                duration: 2 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Additional phone surrounding dots - More prominent */}
-        <div className="absolute top-1/4 right-5 w-80 h-80">
-          {[...Array(60)].map((_, i) => (
-            <motion.div
-              key={`phone-surround-${i}`}
-              className="absolute w-1.5 h-1.5 bg-emerald-300 rounded-full shadow-sm"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0.2, 0.7, 0.2],
-                scale: [0.3, 0.8, 0.3],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 3,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Left content area dots - New prominent area */}
-        <div className="absolute top-1/4 left-10 w-60 h-60">
-          {[...Array(50)].map((_, i) => (
-            <motion.div
-              key={`left-content-${i}`}
-              className="absolute w-1.5 h-1.5 bg-green-200 rounded-full shadow-sm"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0.2, 0.6, 0.2],
-                scale: [0.4, 0.8, 0.4],
-              }}
-              transition={{
-                duration: 2.5 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 2.5,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Center area dots - New prominent area */}
-        <div className="absolute top-1/3 left-1/3 w-40 h-40">
-          {[...Array(30)].map((_, i) => (
-            <motion.div
-              key={`center-area-${i}`}
-              className="absolute w-1.5 h-1.5 bg-emerald-200 rounded-full shadow-sm"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0.1, 0.5, 0.1],
-                scale: [0.3, 0.7, 0.3],
-              }}
-              transition={{
-                duration: 4 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 4,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Enhanced scattered dots across the background */}
+      {/* Enhanced Random Dot Pattern with Vibrant Colors */}
+      {mounted && (
         <div className="absolute inset-0">
-          {[...Array(60)].map((_, i) => (
-            <motion.div
-              key={`scattered-${i}`}
-              className="absolute w-1.5 h-1.5 bg-green-300 rounded-full shadow-sm"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0.2, 0.7, 0.2],
-                scale: [0.4, 0.8, 0.4],
-              }}
-              transition={{
-                duration: 4 + Math.random() * 3,
-                repeat: Infinity,
-                delay: Math.random() * 4,
-              }}
-            />
-          ))}
-        </div>
+          {/* Main floating dots with vibrant colors */}
+          <div className="absolute inset-0">
+            {floatingDots.map((dot, i) => (
+              <motion.div
+                key={`floating-${i}`}
+                className={`absolute rounded-full shadow-lg ${
+                  i % 4 === 0 ? 'bg-gradient-to-br from-green-400 to-emerald-500' :
+                  i % 4 === 1 ? 'bg-gradient-to-br from-blue-400 to-cyan-500' :
+                  i % 4 === 2 ? 'bg-gradient-to-br from-purple-400 to-pink-500' :
+                  'bg-gradient-to-br from-orange-400 to-red-500'
+                }`}
+                style={{
+                  left: `${dot.left}%`,
+                  top: `${dot.top}%`,
+                  width: `${dot.size}px`,
+                  height: `${dot.size}px`,
+                }}
+                initial={{ opacity: 0, scale: 0, rotate: 0 }}
+                animate={{ 
+                  opacity: [0, dot.intensity * 0.8, dot.intensity * 0.3, dot.intensity * 0.8],
+                  scale: [0, 1.2, 0.8, 1.2],
+                  rotate: [0, 180, 360],
+                  y: [0, -10, 0, 10, 0],
+                }}
+                transition={{
+                  duration: 6 + (i % 3),
+                  repeat: Infinity,
+                  delay: dot.delay,
+                  ease: "easeInOut"
+                }}
+              />
+            ))}
+          </div>
 
-        {/* Floating accent dots - Larger and more prominent */}
-        <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={`accent-${i}`}
-              className="absolute w-2 h-2 bg-green-500 rounded-full shadow-md"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0.3, 1, 0.3],
-                scale: [0.5, 1.5, 0.5],
-                y: [0, -10, 0],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 3,
-              }}
-            />
-          ))}
+          {/* Accent dots with glow effect */}
+          <div className="absolute inset-0">
+            {accentDots.map((dot, i) => (
+              <motion.div
+                key={`accent-${i}`}
+                className={`absolute rounded-full ${
+                  i % 3 === 0 ? 'bg-green-500 shadow-green-500/50' :
+                  i % 3 === 1 ? 'bg-blue-500 shadow-blue-500/50' :
+                  'bg-purple-500 shadow-purple-500/50'
+                } shadow-2xl`}
+                style={{
+                  left: `${dot.left}%`,
+                  top: `${dot.top}%`,
+                  width: `${dot.size + 1}px`,
+                  height: `${dot.size + 1}px`,
+                  boxShadow: `0 0 ${dot.size * 4}px currentColor`,
+                }}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ 
+                  opacity: [0, 0.9, 0.4, 0.9],
+                  scale: [0, 1.5, 1, 1.5],
+                  x: [0, 15, -10, 15, 0],
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  delay: dot.delay + 1,
+                  ease: "easeInOut"
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Edge sparkle dots */}
+          <div className="absolute inset-0">
+            {edgeDots.map((dot, i) => (
+              <motion.div
+                key={`edge-${i}`}
+                className="absolute w-1 h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"
+                style={{
+                  left: `${dot.left}%`,
+                  top: `${dot.top}%`,
+                }}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ 
+                  opacity: [0, 1, 0, 1, 0],
+                  scale: [0, 2, 1, 2, 0],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  delay: dot.delay * 1.5,
+                  ease: "easeInOut"
+                }}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -244,6 +161,7 @@ export default function HeroSection() {
                       alt="CADIMAR Logo" 
                       width={100}
                       height={100}
+                      priority
                       className="object-contain"
                     />
                   </div>

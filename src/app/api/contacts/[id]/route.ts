@@ -3,9 +3,10 @@ import { db } from '@/lib/db';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const { id } = params;
     const contact = await db.getContactById(id);
     
@@ -28,10 +29,11 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
+    const params = await context.params;
     const { id } = params;
 
     const contact = await db.updateContactStatus(id, body);
