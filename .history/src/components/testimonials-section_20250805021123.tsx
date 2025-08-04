@@ -17,7 +17,7 @@ export default function TestimonialsSection() {
       review: "Exceptional TikTok advertising results! Our revenue increased by 300% within the first quarter. The team's expertise and strategic approach made all the difference.",
       initial: "J",
       bgColor: "from-purple-500 to-indigo-600",
-      image: "/testimonials/OIP1.jpg"
+      image: "/testimonials/OIP.jpg"
     },
     {
       name: "Luca Caporale", 
@@ -33,7 +33,7 @@ export default function TestimonialsSection() {
       review: "The team delivered beyond expectations. Their strategic approach to TikTok advertising helped us reach new audiences and significantly boost our brand awareness.",
       initial: "S",
       bgColor: "from-blue-500 to-cyan-600",
-      image: "/testimonials/OIP3.jpg"
+      image: "/testimonials/OIP.jpg"
     }
   ];
 
@@ -97,21 +97,19 @@ export default function TestimonialsSection() {
                 whileHover={{ scale: 1.02, y: -5 }}
               >
                 <div className="flex items-center space-x-4 mb-6">
-                  <div className="relative w-20 h-20 flex-shrink-0">
+                  <div className="relative w-16 h-16">
                     <Image
                       src={testimonial.image}
                       alt={testimonial.name}
-                      width={80}
-                      height={80}
-                      className="rounded-full object-cover w-full h-full shadow-lg border-2 border-white/10"
-                      style={{ objectFit: 'cover' }}
-                      priority
+                      width={64}
+                      height={64}
+                      className="rounded-full object-cover"
                     />
-                    <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${testimonial.bgColor} opacity-0 hover:opacity-30 transition-opacity duration-300 shadow-xl`}></div>
+                    <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${testimonial.bgColor} opacity-0 hover:opacity-30 transition-opacity duration-300`}></div>
                   </div>
-                  <div className="flex flex-col justify-center">
-                    <h4 className="font-bold text-lg leading-tight mb-1">{testimonial.name}</h4>
-                    <p className="text-purple-200 text-sm leading-snug">{testimonial.title}</p>
+                  <div>
+                    <h4 className="font-bold text-lg">{testimonial.name}</h4>
+                    <p className="text-purple-200 text-sm">{testimonial.title}</p>
                   </div>
                 </div>
                 <div className="flex text-yellow-400 mb-4">

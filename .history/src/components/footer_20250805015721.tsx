@@ -92,18 +92,18 @@ export default function Footer() {
               <div className="flex items-start space-x-3">
                 <Phone className="w-5 h-5 text-brand-red mt-1 flex-shrink-0" />
                 <div>
-                  <p>Local: (+84)868283784</p>
+                  <p>Global: (+84)868283784</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
                 <Mail className="w-5 h-5 text-brand-red mt-1 flex-shrink-0" />
-                <p>support@cadimar.net</p>
+                <p>info@cadimar.com</p>
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-brand-red mt-1 flex-shrink-0" />
                 <div>
-                  <p>Innovation Park, San Jose CA 95134</p>
-                  <p>789 Future Tech Blvd.</p>
+                  <p>123 Digital Innovation St.</p>
+                  <p>Tech District, City 12345</p>
                 </div>
               </div>
             </div>

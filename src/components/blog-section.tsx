@@ -30,8 +30,17 @@ export default function BlogSection() {
   ];
 
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-6">
+    <section className="py-20 bg-gradient-to-br from-gray-900 via-green-900 to-gray-800 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-20 right-20 w-64 h-64 bg-green-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 left-20 w-80 h-80 bg-emerald-400/20 rounded-full blur-3xl"></div>
+      </div>
+      
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+      
+      <div className="container mx-auto px-6 relative z-10">
         <motion.div 
           className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
@@ -39,10 +48,10 @@ export default function BlogSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-white mb-4 drop-shadow-lg">
             Latest Insights
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Stay updated with the latest trends in digital innovation and business growth
           </p>
         </motion.div>
@@ -51,16 +60,16 @@ export default function BlogSection() {
           {blogPosts.map((post, index) => (
             <motion.article
               key={index}
-              className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow"
+              className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-white/15"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
-              <div className="h-48 bg-gradient-to-br from-brand-green to-brand-green-light"></div>
+              <div className="h-48 bg-gradient-to-br from-green-600 to-emerald-700"></div>
               <div className="p-6">
-                <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
-                  <span className="bg-brand-green/10 text-brand-green px-3 py-1 rounded-full text-xs font-medium">
+                <div className="flex items-center space-x-4 text-sm text-gray-400 mb-3">
+                  <span className="bg-green-600/20 text-green-300 px-3 py-1 rounded-full text-xs font-medium border border-green-500/30">
                     {post.category}
                   </span>
                   <div className="flex items-center space-x-1">
@@ -73,15 +82,15 @@ export default function BlogSection() {
                   </div>
                 </div>
                 
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                <h3 className="text-xl font-bold text-white mb-3">
                   {post.title}
                 </h3>
                 
-                <p className="text-gray-600 mb-4 leading-relaxed">
+                <p className="text-gray-300 mb-4 leading-relaxed">
                   {post.excerpt}
                 </p>
                 
-                <Link href="/blogs" className="inline-flex items-center text-brand-green hover:text-brand-green-dark font-medium">
+                <Link href="/blogs" className="inline-flex items-center text-green-400 hover:text-green-300 font-medium">
                   Read More
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
@@ -99,7 +108,7 @@ export default function BlogSection() {
         >
           <Link 
             href="/blogs"
-            className="inline-flex items-center px-8 py-3 bg-brand-green text-white font-medium rounded-full hover:bg-brand-green-dark transition-colors"
+            className="inline-flex items-center px-8 py-3 bg-green-600 text-white font-medium rounded-full hover:bg-green-700 transition-colors shadow-lg hover:shadow-xl"
           >
             View All Posts
             <ArrowRight className="w-5 h-5 ml-2" />

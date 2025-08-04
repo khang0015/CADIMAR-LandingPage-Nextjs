@@ -17,7 +17,7 @@ export default function TestimonialsSection() {
       review: "Exceptional TikTok advertising results! Our revenue increased by 300% within the first quarter. The team's expertise and strategic approach made all the difference.",
       initial: "J",
       bgColor: "from-purple-500 to-indigo-600",
-      image: "/testimonials/OIP1.jpg"
+      image: "/testimonials/OIP.jpg"
     },
     {
       name: "Luca Caporale", 

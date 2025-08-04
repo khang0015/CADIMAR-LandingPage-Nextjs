@@ -29,10 +29,16 @@ export default function PartnersSection() {
   ];
 
   return (
-    <section id="about" className="py-20 bg-gray-100">
-      <div className="container mx-auto px-6">
+    <section id="about" className="py-20 bg-gradient-to-br from-white via-green-50 to-emerald-100 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 left-20 w-64 h-64 bg-green-500 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-20 w-80 h-80 bg-emerald-400 rounded-full blur-3xl"></div>
+      </div>
+      
+      <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
-          <p className="text-brand-red font-semibold text-sm uppercase tracking-wider mb-4">
+          <p className="text-green-600 font-semibold text-sm uppercase tracking-wider mb-4">
             {t("partners.tagline")}
           </p>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -44,11 +50,11 @@ export default function PartnersSection() {
           {partners.map((partner, index) => {
             const IconComponent = partner.icon;
             return (
-              <div key={index} className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-shadow">
-                <div className={`w-20 h-20 mx-auto mb-6 ${partner.bgColor} rounded-2xl flex items-center justify-center`}>
+              <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300 border border-white/50 hover:border-green-200">
+                <div className={`w-20 h-20 mx-auto mb-6 ${partner.bgColor} rounded-2xl flex items-center justify-center shadow-md`}>
                   <IconComponent className="text-white text-2xl" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{partner.name}</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-3">{partner.name}</h3>
                 <p className="text-gray-600 leading-relaxed">{partner.description}</p>
               </div>
             );

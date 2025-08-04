@@ -103,7 +103,7 @@ export default function Footer() {
                 <MapPin className="w-5 h-5 text-brand-red mt-1 flex-shrink-0" />
                 <div>
                   <p>Innovation Park, San Jose CA 95134</p>
-                  <p>789 Future Tech Blvd.</p>
+                  <p>789 Future Tech Blvd.  </p>
                 </div>
               </div>
             </div>
