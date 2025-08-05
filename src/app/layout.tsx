@@ -14,8 +14,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Digital Marketing Excellence",
+  title: "Cadimar-Digital Marketing Agency Tiktok, Facebook",
   description: "Transform your business with powerful digital marketing solutions. We help businesses grow through innovative strategies and creative content.",
+  icons: {
+    icon: "/cadimar_logo.png",
+    apple: "/cadimar_logo.png",
+  },
+  openGraph: {
+    title: "Digital Marketing Agency Tiktok, Facebook",
+    description: "Transform your business with powerful digital marketing solutions. We help businesses grow through innovative strategies and creative content.",
+    images: [
+      {
+        url: "/cadimar_logo.png",
+        width: 800,
+        height: 600,
+        alt: "CADIMAR Logo",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

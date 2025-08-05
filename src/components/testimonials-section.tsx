@@ -25,7 +25,7 @@ export default function TestimonialsSection() {
       review: "Professional service with outstanding results. They transformed our social media presence and delivered measurable ROI. Highly recommend their TikTok advertising expertise.",
       initial: "L",
       bgColor: "from-indigo-500 to-blue-600",
-      image: "/testimonials/OIP2.jpg"
+      image: "/avatars/alex.jpg"
     },
     {
       name: "Sarkawt Shaban",
@@ -33,7 +33,7 @@ export default function TestimonialsSection() {
       review: "The team delivered beyond expectations. Their strategic approach to TikTok advertising helped us reach new audiences and significantly boost our brand awareness.",
       initial: "S",
       bgColor: "from-blue-500 to-cyan-600",
-      image: "/testimonials/OIP3.jpg"
+      image: "/avatars/sarah.jpg"
     }
   ];
 

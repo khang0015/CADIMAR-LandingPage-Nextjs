@@ -197,11 +197,13 @@ export default function Header() {
           {/* Language Switcher & CTA */}
           <div className="flex items-center space-x-4">
             {/* Language Switcher */}
+            {/* Temporarily hidden
             <div className="hidden sm:flex items-center">
               <LanguageSelector 
                 variant="compact" 
               />
             </div>
+            */}
             
             <Button 
               onClick={() => scrollToSection("contact")}
@@ -259,10 +261,11 @@ export default function Header() {
                 {t("nav.contact")}
               </button>
               
-              {/* Mobile Language Switcher */}
+              {/* Mobile Language Switcher - Temporarily hidden
               <div className="flex items-center justify-center pt-4 border-t border-gray-200">
                 <LanguageSelector />
               </div>
+              */}
             </div>
           </div>
         )}

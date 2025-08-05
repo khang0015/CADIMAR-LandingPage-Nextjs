@@ -6,7 +6,17 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useTranslations } from "@/hooks/use-translations";
-import { Calendar, Clock, ChevronLeft, Share2, Star } from "lucide-react";
+import { 
+  Calendar, 
+  Clock, 
+  ChevronLeft, 
+  Share2, 
+  Star,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Bookmark 
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import ReactMarkdown from 'react-markdown';
@@ -73,7 +83,7 @@ The future of digital innovation offers tremendous potential for businesses that
     image: "/blogs/future_of_digital_innovation.png",
     author: {
       name: "Alex Johnson",
-      avatar: "/avatars/alex.jpg"
+      avatar: "/testimonials/OIP2.jpg"
     },
     lang: "en",
     featured: true,
@@ -201,7 +211,7 @@ AI is transforming how businesses operate, compete, and create value. By thought
     image: "/blogs/AI_in_modern_business.jpg",
     author: {
       name: "Michael Chen",
-      avatar: "/avatars/michael.jpg"
+      avatar: "/testimonials/OIP1.jpg"
     },
     lang: "en",
     featured: false,
@@ -285,13 +295,14 @@ Digital marketing is both an art and a science, requiring creativity, analytical
   }
 ];
 
-interface BlogPostPageProps {
+type Props = {
   params: {
     slug: string;
   };
-}
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
+export default function BlogPostPage({ params }: Props) {
   const { currentLanguage } = useTranslations();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
@@ -348,37 +359,52 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-      {/* Hero Banner */}
-      <div className="relative bg-gradient-to-r from-green-600 to-emerald-700 h-[40vh] lg:h-[50vh]">
-        <Image
-          src={post.image}
-          alt={post.title}
-          fill
-          className="object-cover mix-blend-overlay opacity-40"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+      {/* Hero Banner with Parallax */}
+      <div className="relative bg-gradient-to-r from-green-600 to-emerald-700 h-[50vh] lg:h-[60vh] overflow-hidden">
+        <motion.div
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={post?.image || ''}
+            alt={post?.title || ''}
+            fill
+            className="object-cover mix-blend-overlay opacity-40"
+            priority
+          />
+        </motion.div>
         
-        <div className="container mx-auto px-6 h-full flex flex-col justify-end pb-12 relative z-10">
-          <div className="flex gap-2 mb-4">
-            <Badge className="bg-white/20 text-white backdrop-blur-sm px-3 py-1">
-              {post.category}
-            </Badge>
-            {post.featured && (
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+        
+        <div className="container mx-auto px-6 h-full flex flex-col justify-end pb-16 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-wrap gap-2 mb-4"
+          >
+            {post?.category && (
+              <Badge className="bg-white/20 text-white backdrop-blur-sm px-4 py-1.5 text-sm font-medium">
+                {post.category}
+              </Badge>
+            )}
+            {post?.featured && (
               <Badge className="bg-green-500 text-white px-3 py-1 flex items-center gap-1">
                 <Star className="h-3 w-3" />
                 <span>Featured</span>
               </Badge>
             )}
-          </div>
+          </motion.div>
           
           <motion.h1 
-            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 max-w-4xl"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 max-w-4xl leading-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {post.title}
+            {post?.title}
           </motion.h1>
           
           <motion.div 
@@ -387,27 +413,33 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full overflow-hidden relative border-2 border-white/30">
-                <Image
-                  src={post.author.avatar || "https://via.placeholder.com/80"}
-                  alt={post.author.name}
-                  fill
-                  className="object-cover"
-                />
+            {post?.author && (
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full overflow-hidden relative border-2 border-white/30">
+                  <Image
+                    src={post.author.avatar || "https://via.placeholder.com/80"}
+                    alt={post.author.name}
+                    fill
+                    className="object-cover"
+                    />
+                </div>
+                <span>{post.author.name}</span>
               </div>
-              <span>{post.author.name}</span>
-            </div>
+            )}
             
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              <span>{formatDate(post.createdAt)}</span>
-            </div>
+            {post?.createdAt && (
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                <span>{formatDate(post.createdAt)}</span>
+              </div>
+            )}
             
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              <span>{getReadingTime(post.content)} min read</span>
-            </div>
+            {post?.content && (
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4" />
+                <span>{getReadingTime(post.content)} min read</span>
+              </div>
+            )}
           </motion.div>
         </div>
       </div>
@@ -423,93 +455,155 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                 Back to all articles
               </Button>
             </Link>
+
+            {/* Table of Contents */}
+            <motion.div
+              className="mb-8 p-6 bg-gray-50 rounded-xl border border-gray-100"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Table of Contents</h2>
+              <nav className="space-y-2">
+                {post?.content.split('\n').filter(line => line.startsWith('#')).map((heading, index) => (
+                  <a
+                    key={index}
+                    href={`#${heading.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`}
+                    className="block text-green-600 hover:text-green-700 transition-colors"
+                  >
+                    {heading.replace(/#/g, '').trim()}
+                  </a>
+                ))}
+              </nav>
+            </motion.div>
             
-            <motion.div 
-              className="prose prose-lg max-w-none prose-headings:text-gray-800 prose-p:text-gray-600 prose-a:text-green-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl"
+            <motion.article 
+              className="prose prose-lg max-w-none
+                prose-headings:text-gray-800 prose-headings:font-bold prose-headings:mb-6
+                prose-p:text-gray-600 prose-p:leading-relaxed
+                prose-a:text-green-600 prose-a:no-underline hover:prose-a:underline
+                prose-img:rounded-xl prose-img:shadow-lg
+                prose-blockquote:border-l-4 prose-blockquote:border-green-500
+                prose-blockquote:bg-green-50 prose-blockquote:p-6 prose-blockquote:rounded-r-xl
+                prose-code:bg-gray-100 prose-code:px-2 prose-code:py-0.5 prose-code:rounded
+                prose-pre:bg-gray-900 prose-pre:rounded-xl prose-pre:shadow-lg"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               <ReactMarkdown>
-                {post.content}
+                {post?.content || ''}
               </ReactMarkdown>
-            </motion.div>
+            </motion.article>
             
-            {/* Share */}
+            {/* Author and Share Section */}
             <div className="mt-12 border-t border-gray-200 pt-8">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full overflow-hidden relative border border-gray-200">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full overflow-hidden relative border-2 border-green-100 shadow-lg">
                     <Image
-                      src={post.author.avatar || "https://via.placeholder.com/80"}
-                      alt={post.author.name}
+                      src={post?.author.avatar || "https://via.placeholder.com/80"}
+                      alt={post?.author.name || 'Author'}
                       fill
                       className="object-cover"
                     />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Written by</p>
-                    <p className="font-medium text-gray-900">{post.author.name}</p>
+                    <p className="text-sm text-gray-500 mb-1">Written by</p>
+                    <p className="font-semibold text-lg text-gray-900">{post?.author.name}</p>
+                    <p className="text-sm text-gray-600 mt-1">Senior Content Writer</p>
                   </div>
                 </div>
                 
-                <Button variant="outline" className="flex items-center gap-2">
-                  <Share2 className="h-4 w-4" />
-                  Share
-                </Button>
+                <div className="flex items-center gap-3">
+                  <Button variant="outline" className="flex-1 md:flex-none bg-white hover:bg-gray-50">
+                    <Facebook className="h-4 w-4 mr-2" />
+                    Share
+                  </Button>
+                  <Button variant="outline" className="flex-1 md:flex-none bg-white hover:bg-gray-50">
+                    <Twitter className="h-4 w-4 mr-2" />
+                    Tweet
+                  </Button>
+                  <Button variant="outline" className="flex-1 md:flex-none bg-white hover:bg-gray-50">
+                    <Linkedin className="h-4 w-4 mr-2" />
+                    Post
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
           
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24">
+            <div className="sticky top-24 space-y-8">
               {/* Related Articles */}
               {relatedPosts.length > 0 && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-                  <div className="px-6 py-4 border-b border-gray-100">
-                    <h3 className="font-bold text-gray-900">Related Articles</h3>
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+                >
+                  <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-green-50 to-emerald-50">
+                    <h3 className="font-bold text-gray-900 flex items-center gap-2">
+                      <Bookmark className="h-4 w-4 text-green-600" />
+                      Related Articles
+                    </h3>
                   </div>
                   
                   <div className="divide-y divide-gray-100">
                     {relatedPosts.map((related) => (
-                      <Link key={related.id} href={`/blogs/${related.slug}`}>
-                        <div className="p-6 hover:bg-gray-50 transition-colors">
-                          <Badge className="mb-2 bg-gray-100 text-gray-600 hover:bg-gray-200">
-                            {related.category}
-                          </Badge>
-                          <h4 className="font-medium text-gray-900 mb-1 line-clamp-2">
-                            {related.title}
-                          </h4>
-                          <p className="text-sm text-gray-500 line-clamp-2 mb-2">
-                            {related.excerpt}
-                          </p>
-                          <div className="flex items-center text-xs text-gray-400">
-                            <Calendar className="h-3 w-3 mr-1" />
-                            <span>{formatDate(related.createdAt)}</span>
+                      <motion.div
+                        key={related.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <Link href={`/blogs/${related.slug}`}>
+                          <div className="p-6 hover:bg-gray-50 transition-colors group">
+                            <Badge className="mb-2 bg-gray-100 text-gray-600 group-hover:bg-green-100 group-hover:text-green-700">
+                              {related.category}
+                            </Badge>
+                            <h4 className="font-medium text-gray-900 mb-1 line-clamp-2 group-hover:text-green-600">
+                              {related.title}
+                            </h4>
+                            <p className="text-sm text-gray-500 line-clamp-2 mb-2">
+                              {related.excerpt}
+                            </p>
+                            <div className="flex items-center text-xs text-gray-400">
+                              <Calendar className="h-3 w-3 mr-1" />
+                              <span>{formatDate(related.createdAt)}</span>
+                            </div>
                           </div>
-                        </div>
-                      </Link>
+                        </Link>
+                      </motion.div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               )}
               
               {/* Subscribe */}
-              <div className="bg-gradient-to-r from-green-600 to-emerald-700 rounded-xl p-6 text-white">
-                <h3 className="font-bold text-lg mb-2">Subscribe to Our Newsletter</h3>
-                <p className="text-green-50 text-sm mb-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-gradient-to-r from-green-600 to-emerald-700 rounded-xl p-8 text-white shadow-lg"
+              >
+                <h3 className="font-bold text-xl mb-3">Subscribe to Our Newsletter</h3>
+                <p className="text-green-50 text-sm mb-6 leading-relaxed">
                   Get the latest articles and insights straight to your inbox.
                 </p>
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  className="w-full p-2 rounded bg-white/10 border border-white/20 text-white placeholder:text-green-200 text-sm mb-3"
-                />
-                <Button className="w-full bg-white text-green-700 hover:bg-gray-100">
-                  Subscribe
-                </Button>
-              </div>
+                <div className="space-y-4">
+                  <input
+                    type="email"
+                    placeholder="Your email address"
+                    className="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-green-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
+                  />
+                  <Button className="w-full bg-white text-green-700 hover:bg-gray-100 py-6 text-base font-medium">
+                    Subscribe Now
+                  </Button>
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
