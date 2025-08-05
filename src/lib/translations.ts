@@ -25,8 +25,8 @@ export const translations = {
     "hero.trusted_by": "Trusted by industry leaders",
     
     // Services
-    "services.tagline": "OUR SOLUTIONS",
-    "services.title": "Grow your presence & drive revenue from scalable campaigns.",
+    "services.tagline": "MY SERVICES",
+    "services.title": "Launch smarter campaigns on platforms your customers trust.",
     
     // Platforms
     "platforms.tiktok.name": "TikTok",
@@ -43,12 +43,12 @@ export const translations = {
     "platforms.facebook.cta": "DISCOVER FACEBOOK ADS",
     
     // Partners
-    "partners.tagline": "STRATEGIC PARTNERS",
-    "partners.title": "The reason why brands choose us.",
+    "partners.tagline": "TRUSTED PARTNERS",
+    "partners.title": "Why Brands Choose Cadimar",
     
     // Testimonials
     "testimonials.tagline": "TESTIMONIALS",
-    "testimonials.title": "Don't just take our words for it, take our customers'.",
+    "testimonials.title": "Success, in our clients’ own words",
     
     // Insights
     "insights.tagline": "OUR THOUGHTS",

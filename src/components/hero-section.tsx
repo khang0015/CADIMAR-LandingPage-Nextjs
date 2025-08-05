@@ -183,16 +183,19 @@ export default function HeroSection() {
               </AnimatedText>
               <AnimatedText delay={0.2}>
                 <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
-                  <span>Driving brand growth on</span><br />
-                  <span className="text-green-600">meaningful</span><br />
-                  <span>platforms</span>
+                  <span>Maximizing growth through</span><br />
+                  <div className="text-green-600 space-y-1">
+                    <span>smart</span><br />
+                    <span>scalable</span>
+                  </div>
+                  <span>ad strategies</span>
                 </h1>
               </AnimatedText>
             </div>
             
             <AnimatedText delay={0.4}>
               <p className="text-base text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                We help you design effective sales channels on the world's most influential platforms and drive revenue through organic discovery and paid campaigns.
+              We build powerful, performance-driven sales ecosystems on top global platforms—amplifying your brand through intelligent strategy, compelling storytelling, and precision-targeted growth campaigns.
               </p>
             </AnimatedText>
 

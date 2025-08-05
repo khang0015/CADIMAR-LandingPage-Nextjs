@@ -10,7 +10,7 @@ export default function PartnersSection() {
   const partners = [
     {
       name: "TikTok Marketing Partners",
-      description: "Recognized as a TikTok Marketing Partner, we provide valuable insights to our clients, helping them effectively grow their business and presence on TikTok Ads.",
+      description: "Trusted by TikTok as an official Marketing Partner, we deliver high-quality solutions that help brands grow with confidence.",
       icon: SiTiktok,
       bgColor: "bg-black"
     },
@@ -21,7 +21,7 @@ export default function PartnersSection() {
       bgColor: "bg-gradient-to-br from-blue-500 to-green-500"
     },
     {
-      name: "Microsoft Partner",
+      name: "Facebook Partner",
       description: "Trusted by Microsoft as a top solution partner, Mega Digital delivered an effective and efficient performance strategy for our global clients.",
       icon: Building2,
       bgColor: "bg-gradient-to-br from-blue-400 to-blue-600"
