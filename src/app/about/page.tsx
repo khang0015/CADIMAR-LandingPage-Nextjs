@@ -96,14 +96,14 @@ export default function AboutPage() {
           >
             <div className="mb-8">
               <Image 
-                src="/cadimar-logo-with-text.jpg" 
+                src="/cadimar_text.png" 
                 alt="CADIMAR Logo" 
                 className="h-20 mx-auto mb-6"
-                width={80}
-                height={80}
+                width={160}
+                height={40}
               />
               <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-                {currentLanguage === 'vi' ? 'Về CADIMAR' : 'About CADIMAR'}
+                {currentLanguage === 'vi' ? 'Về ' : 'About '}<Image src="/cadimar_text.png" width={120} height={30} alt="CADIMAR" className="inline-block align-middle" />
               </h1>
               <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
                 {currentLanguage === 'vi'
@@ -151,8 +151,8 @@ export default function AboutPage() {
             </h2>
             <p className="text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
               {currentLanguage === 'vi'
-                ? 'Tại CADIMAR, chúng tôi tin rằng mỗi thương hiệu đều có một câu chuyện độc đáo cần được kể. Sứ mệnh của chúng tôi là giúp các doanh nghiệp kết nối với khách hàng mục tiêu thông qua các chiến dịch marketing sáng tạo, hiệu quả và có thể đo lường được.'
-                : 'At CADIMAR, we believe every brand has a unique story to tell. Our mission is to help businesses connect with their target audience through creative, effective, and measurable marketing campaigns.'
+                ? 'Tại công ty của chúng tôi, chúng tôi tin rằng mỗi thương hiệu đều có một câu chuyện độc đáo cần được kể. Sứ mệnh của chúng tôi là giúp các doanh nghiệp kết nối với khách hàng mục tiêu thông qua các chiến dịch marketing sáng tạo, hiệu quả và có thể đo lường được.'
+                : 'At our company, we believe every brand has a unique story to tell. Our mission is to help businesses connect with their target audience through creative, effective, and measurable marketing campaigns.'
               }
             </p>
           </motion.div>
@@ -216,8 +216,8 @@ export default function AboutPage() {
             </h2>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto">
               {currentLanguage === 'vi'
-                ? 'Những giá trị này định hướng mọi hoạt động của chúng tôi và tạo nên văn hóa doanh nghiệp đặc biệt tại CADIMAR.'
-                : 'These values guide all our activities and create the unique corporate culture at CADIMAR.'
+                ? 'Những giá trị này định hướng mọi hoạt động của chúng tôi và tạo nên văn hóa doanh nghiệp đặc biệt tại công ty chúng tôi.'
+                : 'These values guide all our activities and create the unique corporate culture at our company.'
               }
             </p>
           </motion.div>
@@ -265,8 +265,8 @@ export default function AboutPage() {
             </h2>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto">
               {currentLanguage === 'vi'
-                ? 'Gặp gỡ những chuyên gia tài năng đang thúc đẩy sự thành công của CADIMAR và khách hàng.'
-                : 'Meet the talented experts driving the success of CADIMAR and our clients.'
+                ? 'Gặp gỡ những chuyên gia tài năng đang thúc đẩy sự thành công của công ty và khách hàng.'
+                : 'Meet the talented experts driving the success of our company and our clients.'
               }
             </p>
           </motion.div>
@@ -312,11 +312,13 @@ export default function AboutPage() {
             viewport={{ once: true }}
           >
             <Award className="h-16 w-16 text-green-200 mx-auto mb-8" />
-            <h2 className="text-4xl font-bold text-white mb-6">
+            <h2 className="text-4xl font-bold text-white mb-6 flex items-center justify-center">
               {currentLanguage === 'vi' 
-                ? 'Sẵn sàng phát triển cùng CADIMAR?' 
-                : 'Ready to grow with CADIMAR?'
+                ? 'Sẵn sàng phát triển cùng ' 
+                : 'Ready to grow with '
               }
+              <Image src="/cadimar_text.png" width={120} height={30} alt="CADIMAR" className="inline-block ml-2" />
+              ?
             </h2>
             <p className="text-xl text-green-100 mb-8 leading-relaxed">
               {currentLanguage === 'vi'

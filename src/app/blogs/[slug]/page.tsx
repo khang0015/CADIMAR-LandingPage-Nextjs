@@ -1,21 +1,28 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { notFound } from "next/navigation";
 import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useTranslations } from "@/hooks/use-translations";
-import { Calendar, Clock, ArrowLeft, Star } from "lucide-react";
+import { Calendar, Clock, ChevronLeft, Share2, Star } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import ReactMarkdown from 'react-markdown';
 
 interface BlogPost {
   id: string;
   title: string;
   slug: string;
-  content: string;
   excerpt: string;
+  content: string;
+  category: string;
+  image: string;
+  author: {
+    name: string;
+    avatar: string;
+  };
   lang: string;
   featured: boolean;
   published: boolean;
@@ -23,36 +30,305 @@ interface BlogPost {
   updatedAt: string;
 }
 
+// Dữ liệu blog tĩnh
+const staticBlogPosts: BlogPost[] = [
+  {
+    id: "1",
+    title: "The Future of Digital Innovation",
+    slug: "future-of-digital-innovation",
+    excerpt: "Discover how emerging technologies are reshaping the business landscape and creating new opportunities for growth.",
+    content: `
+# The Future of Digital Innovation
+
+Digital innovation continues to transform how businesses operate and compete. From artificial intelligence to blockchain, the pace of technological change is accelerating, creating both challenges and opportunities for organizations across all sectors.
+
+## Key Trends to Watch
+
+### 1. Artificial Intelligence and Machine Learning
+
+AI and machine learning are becoming increasingly sophisticated, enabling businesses to automate complex tasks, gain deeper insights from data, and create more personalized customer experiences. As these technologies continue to evolve, they will drive significant productivity gains and enable new business models.
+
+### 2. Internet of Things (IoT)
+
+The proliferation of connected devices is generating vast amounts of data that businesses can leverage to optimize operations, improve product design, and deliver better customer service. The IoT is particularly transformative in manufacturing, healthcare, and smart cities.
+
+### 3. Extended Reality (XR)
+
+Virtual, augmented, and mixed reality technologies are creating new ways for businesses to engage with customers, train employees, and visualize complex data. As XR hardware becomes more affordable and accessible, its adoption will accelerate across industries.
+
+## Implications for Business Strategy
+
+Organizations that want to thrive in this rapidly evolving landscape need to develop a clear digital strategy that aligns with their overall business objectives. This involves:
+
+- Investing in the right technologies and capabilities
+- Building a culture of innovation and experimentation
+- Acquiring and developing digital talent
+- Establishing partnerships and ecosystems
+
+## Conclusion
+
+The future of digital innovation offers tremendous potential for businesses that are prepared to embrace change and invest in the capabilities needed to succeed in an increasingly digital world. By staying attuned to emerging technologies and their potential applications, organizations can position themselves for long-term success.
+    `,
+    category: "Innovation",
+    image: "/blogs/future_of_digital_innovation.png",
+    author: {
+      name: "Alex Johnson",
+      avatar: "/avatars/alex.jpg"
+    },
+    lang: "en",
+    featured: true,
+    published: true,
+    createdAt: "2024-12-15T10:00:00Z",
+    updatedAt: "2024-12-15T10:00:00Z"
+  },
+  {
+    id: "2",
+    title: "Digital Transformation Strategies",
+    slug: "digital-transformation-strategies",
+    excerpt: "Learn the key strategies successful companies use to navigate their digital transformation journey.",
+    content: `
+# Digital Transformation Strategies
+
+Digital transformation is more than just implementing new technologies—it's about fundamentally changing how a business operates and delivers value to its customers. This article explores the key strategies that successful companies employ to navigate their digital transformation journeys.
+
+## 1. Start with a Clear Vision
+
+Effective digital transformation begins with a clear vision of what the organization wants to achieve. This vision should be aligned with the company's overall business objectives and communicate how digital technologies will enable new ways of working, new business models, or enhanced customer experiences.
+
+## 2. Secure Leadership Commitment
+
+Digital transformation requires commitment from the top. Leaders must not only provide the necessary resources but also champion the change throughout the organization. When leadership demonstrates a genuine commitment to digital transformation, it sends a powerful message to the rest of the organization.
+
+## 3. Focus on Customer Experience
+
+Successful digital transformations place the customer at the center. By understanding customer needs, pain points, and expectations, organizations can identify the most impactful areas for digital innovation. This customer-centric approach ensures that digital investments deliver real value.
+
+## 4. Build Digital Capabilities
+
+Digital transformation requires new skills and capabilities. Organizations need to assess their current capabilities, identify gaps, and develop strategies to build or acquire the necessary skills. This might involve hiring new talent, reskilling existing employees, or forming strategic partnerships.
+
+## 5. Embrace Agile Ways of Working
+
+Traditional waterfall approaches to project management are often too slow and rigid for digital transformation initiatives. Embracing agile methodologies allows organizations to experiment, learn, and adapt quickly. This iterative approach reduces risk and accelerates time to value.
+
+## 6. Foster a Culture of Innovation
+
+Successful digital transformation requires a culture that encourages experimentation, tolerates failure, and rewards innovation. Organizations need to create safe spaces for employees to try new ideas and learn from failures without fear of negative consequences.
+
+## 7. Invest in Data and Analytics
+
+Data is at the heart of digital transformation. Organizations need to invest in the infrastructure, tools, and skills needed to collect, analyze, and act on data. Advanced analytics can provide valuable insights that drive better decision-making and enable personalized customer experiences.
+
+## Conclusion
+
+Digital transformation is a complex, multifaceted journey that requires a thoughtful, strategic approach. By focusing on these key strategies, organizations can increase their chances of success and realize the full potential of digital technologies to drive business growth and innovation.
+    `,
+    category: "Strategy",
+    image: "/blogs/digital_transformation.jpg",
+    author: {
+      name: "Sarah Kim",
+      avatar: "/avatars/sarah.jpg"
+    },
+    lang: "en",
+    featured: false,
+    published: true,
+    createdAt: "2024-12-10T14:30:00Z",
+    updatedAt: "2024-12-10T14:30:00Z"
+  },
+  {
+    id: "3",
+    title: "AI in Modern Business",
+    slug: "ai-in-modern-business",
+    excerpt: "Explore how artificial intelligence is revolutionizing business operations and customer experiences.",
+    content: `
+# AI in Modern Business
+
+Artificial intelligence (AI) is no longer a futuristic concept—it's a practical tool that businesses across industries are using to streamline operations, enhance customer experiences, and drive growth. This article explores the various ways AI is transforming modern business practices.
+
+## Enhancing Customer Experiences
+
+AI is revolutionizing how businesses interact with their customers. From intelligent chatbots that provide 24/7 support to recommendation engines that personalize shopping experiences, AI technologies are helping businesses meet the growing expectations of today's consumers.
+
+### Personalization at Scale
+
+One of the most powerful applications of AI in business is its ability to deliver personalized experiences at scale. By analyzing vast amounts of customer data, AI systems can identify patterns and preferences, enabling businesses to tailor their offerings to individual customers without the need for manual intervention.
+
+### Predictive Customer Service
+
+AI systems can predict when a customer might encounter an issue and proactively address it before it becomes a problem. This predictive approach to customer service not only improves customer satisfaction but also reduces support costs.
+
+## Optimizing Operations
+
+AI is helping businesses optimize their operations in numerous ways, from automating routine tasks to providing insights that drive better decision-making.
+
+### Process Automation
+
+Robotic Process Automation (RPA) combined with AI can automate complex, rule-based processes that previously required human intervention. This automation frees up employees to focus on higher-value activities that require creativity, empathy, and strategic thinking.
+
+### Supply Chain Optimization
+
+AI can analyze vast amounts of data from across the supply chain to identify inefficiencies, predict disruptions, and optimize inventory levels. This capability is particularly valuable in today's volatile business environment, where supply chain resilience is a critical competitive advantage.
+
+## Driving Innovation
+
+AI is not just helping businesses improve existing processes—it's also enabling entirely new products, services, and business models.
+
+### Product Development
+
+By analyzing customer feedback, market trends, and competitive intelligence, AI can identify opportunities for product innovation and help businesses develop new offerings that meet emerging customer needs.
+
+### New Business Models
+
+AI is enabling new business models that would not have been possible with traditional technologies. From usage-based pricing to AI-as-a-service, these new models are creating opportunities for businesses to differentiate themselves and capture new sources of value.
+
+## Challenges and Considerations
+
+While the potential benefits of AI are significant, businesses must also navigate various challenges as they integrate these technologies into their operations.
+
+### Data Quality and Availability
+
+AI systems are only as good as the data they're trained on. Businesses need to ensure they have access to high-quality, relevant data and that this data is properly prepared for use in AI applications.
+
+### Ethical Considerations
+
+As AI becomes more pervasive, businesses must consider the ethical implications of their AI applications, including issues related to privacy, bias, and transparency. Developing clear ethical guidelines and governance frameworks is essential for responsible AI adoption.
+
+## Conclusion
+
+AI is transforming how businesses operate, compete, and create value. By thoughtfully integrating AI into their strategies and operations, businesses can enhance customer experiences, optimize operations, and drive innovation. However, success with AI requires more than just technology—it demands a strategic approach that addresses organizational, ethical, and technical considerations.
+    `,
+    category: "Technology",
+    image: "/blogs/AI_in_modern_business.jpg",
+    author: {
+      name: "Michael Chen",
+      avatar: "/avatars/michael.jpg"
+    },
+    lang: "en",
+    featured: false,
+    published: true,
+    createdAt: "2024-12-05T09:15:00Z",
+    updatedAt: "2024-12-05T09:15:00Z"
+  },
+  {
+    id: "4",
+    title: "The Art of Digital Marketing",
+    slug: "art-of-digital-marketing",
+    excerpt: "Master the strategies that will elevate your digital marketing campaigns and drive exceptional results.",
+    content: `
+# The Art of Digital Marketing
+
+Digital marketing has evolved dramatically over the past decade, transforming from a niche specialty into a critical business function. Today, effective digital marketing is both an art and a science, requiring creativity, analytical thinking, and strategic planning. This article explores the key elements of successful digital marketing in today's fast-paced digital landscape.
+
+## Understanding Your Audience
+
+The foundation of effective digital marketing is a deep understanding of your target audience. By developing detailed buyer personas and mapping the customer journey, marketers can create more relevant, engaging content that resonates with their audience at each stage of the decision-making process.
+
+### Data-Driven Insights
+
+Modern digital marketing relies heavily on data to understand audience behavior, preferences, and needs. Analytics tools provide valuable insights into how users interact with your digital properties, which channels drive the most engagement, and which messaging resonates most strongly with your audience.
+
+### Behavioral Segmentation
+
+Going beyond basic demographic segmentation, advanced digital marketers segment their audiences based on behaviors, preferences, and engagement patterns. This more nuanced approach to segmentation enables highly targeted campaigns that deliver the right message to the right person at the right time.
+
+## Content Strategy
+
+Content remains at the heart of digital marketing, serving as the primary vehicle for attracting, engaging, and converting your audience.
+
+### Value-Driven Content
+
+The most effective content provides genuine value to your audience, addressing their questions, challenges, and needs. By focusing on creating content that helps rather than sells, marketers can build trust and establish their brands as authoritative sources of information.
+
+### Format Diversity
+
+Different audience segments consume content in different ways. A comprehensive content strategy incorporates a diverse mix of formats—including blog posts, videos, podcasts, infographics, and interactive tools—to engage audiences across various platforms and preferences.
+
+## Channel Optimization
+
+With so many digital channels available, successful marketers must strategically allocate their resources to maximize impact.
+
+### Channel Selection
+
+Rather than trying to maintain a presence on every platform, effective digital marketers focus on the channels where their target audience is most active and engaged. This focused approach allows for deeper engagement and more efficient resource allocation.
+
+### Cross-Channel Integration
+
+While focusing on key channels is important, the most successful digital marketing strategies integrate across channels to create a cohesive brand experience. This integration ensures consistent messaging and allows marketers to guide users through the customer journey regardless of which channels they use.
+
+## Measurement and Optimization
+
+Digital marketing's measurability is one of its greatest strengths, allowing marketers to continuously optimize their campaigns based on real-time performance data.
+
+### KPI Alignment
+
+Effective measurement begins with selecting the right key performance indicators (KPIs) aligned with your business objectives. Whether you're focused on brand awareness, lead generation, or sales conversion, your KPIs should directly connect to these goals.
+
+### Continuous Testing
+
+The digital landscape is constantly evolving, and what works today may not work tomorrow. Successful digital marketers embrace a culture of continuous testing, experimenting with different approaches to identify what resonates most strongly with their audience.
+
+## Conclusion
+
+Digital marketing is both an art and a science, requiring creativity, analytical thinking, and strategic planning. By developing a deep understanding of your audience, creating valuable content, optimizing your channel strategy, and continuously measuring and refining your approach, you can master the art of digital marketing and drive exceptional results for your business.
+    `,
+    category: "Marketing",
+    image: "/blogs/the_art_of_digital_marketing.jpg",
+    author: {
+      name: "Emily Wilson",
+      avatar: "/avatars/emily.jpg"
+    },
+    lang: "en",
+    featured: true,
+    published: true,
+    createdAt: "2024-12-01T11:45:00Z",
+    updatedAt: "2024-12-01T11:45:00Z"
+  }
+];
+
 interface BlogPostPageProps {
-  params: Promise<{
+  params: {
     slug: string;
-  }>;
+  };
 }
 
 export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const [slug, setSlug] = useState<string>("");
   const { currentLanguage } = useTranslations();
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
 
   useEffect(() => {
-    params.then(resolvedParams => {
-      setSlug(resolvedParams.slug);
-    });
-  }, [params]);
+    // Tìm bài viết theo slug
+    const foundPost = staticBlogPosts.find(p => p.slug === params.slug);
+    
+    if (!foundPost) {
+      notFound();
+    }
+    
+    setPost(foundPost);
+    
+    // Tìm các bài viết liên quan (cùng chuyên mục)
+    const related = staticBlogPosts
+      .filter(p => p.id !== foundPost.id && p.category === foundPost.category)
+      .slice(0, 3);
+    
+    setRelatedPosts(related);
+  }, [params.slug]);
 
-  const { data: post, isLoading, error } = useQuery<BlogPost>({
-    queryKey: ["/api/blogs", slug],
-    queryFn: async () => {
-      const response = await fetch(`/api/blogs/${slug}`);
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error("Blog post not found");
-        }
-        throw new Error("Failed to fetch blog post");
-      }
-      return response.json();
-    },
-    enabled: !!slug
-  });
+  if (!post) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center">
+        <div className="animate-pulse space-y-8 max-w-3xl mx-auto p-8">
+          <div className="h-8 bg-gray-200 rounded-lg w-3/4"></div>
+          <div className="h-60 bg-gray-200 rounded-lg"></div>
+          <div className="space-y-4">
+            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+            <div className="h-4 bg-gray-200 rounded w-full"></div>
+            <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -70,190 +346,173 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
     return readingTime;
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-dark-primary">
-        <div className="max-w-4xl mx-auto px-4 py-16">
-          <div className="animate-pulse space-y-8">
-            <div className="h-8 bg-gray-800 rounded-lg w-1/4"></div>
-            <div className="h-12 bg-gray-800 rounded-lg w-3/4"></div>
-            <div className="h-6 bg-gray-800 rounded-lg w-1/2"></div>
-            <div className="space-y-4">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-4 bg-gray-800 rounded-lg"></div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !post) {
-    return (
-      <div className="min-h-screen bg-dark-primary flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">
-            {currentLanguage === 'vi' ? 'Không tìm thấy bài viết' : 'Blog Post Not Found'}
-          </h1>
-          <p className="text-gray-400 mb-8">
-            {currentLanguage === 'vi' 
-              ? 'Bài viết bạn đang tìm không tồn tại hoặc đã bị xóa.'
-              : 'The blog post you are looking for does not exist or has been removed.'
-            }
-          </p>
-          <Link href="/blogs">
-            <Button className="bg-brand-red hover:bg-red-600">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              {currentLanguage === 'vi' ? 'Về trang blog' : 'Back to Blog'}
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-dark-primary">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-dark-primary via-dark-secondary to-dark-primary border-b border-gray-800">
-        <div className="max-w-4xl mx-auto px-4 py-16">
-          <motion.div
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      {/* Hero Banner */}
+      <div className="relative bg-gradient-to-r from-green-600 to-emerald-700 h-[40vh] lg:h-[50vh]">
+        <Image
+          src={post.image}
+          alt={post.title}
+          fill
+          className="object-cover mix-blend-overlay opacity-40"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        
+        <div className="container mx-auto px-6 h-full flex flex-col justify-end pb-12 relative z-10">
+          <div className="flex gap-2 mb-4">
+            <Badge className="bg-white/20 text-white backdrop-blur-sm px-3 py-1">
+              {post.category}
+            </Badge>
+            {post.featured && (
+              <Badge className="bg-green-500 text-white px-3 py-1 flex items-center gap-1">
+                <Star className="h-3 w-3" />
+                <span>Featured</span>
+              </Badge>
+            )}
+          </div>
+          
+          <motion.h1 
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 max-w-4xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.5 }}
           >
-            {/* Back Button */}
-            <Link href="/blogs">
-              <Button variant="ghost" className="text-gray-400 hover:text-white mb-6">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                {currentLanguage === 'vi' ? 'Về trang blog' : 'Back to Blog'}
-              </Button>
-            </Link>
-
-            {/* Post Meta */}
-            <div className="flex items-center space-x-4 mb-6">
-              {post.featured && (
-                <Badge className="bg-brand-red text-white flex items-center space-x-1">
-                  <Star className="h-3 w-3" />
-                  <span>{currentLanguage === 'vi' ? 'Nổi bật' : 'Featured'}</span>
-                </Badge>
-              )}
-              <Badge variant="outline" className="text-gray-400 border-gray-600">
-                {post.lang.toUpperCase()}
-              </Badge>
-              <div className="flex items-center text-sm text-gray-400 space-x-4">
-                <div className="flex items-center space-x-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>{formatDate(post.createdAt)}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Clock className="h-4 w-4" />
-                  <span>{getReadingTime(post.content)} min read</span>
-                </div>
+            {post.title}
+          </motion.h1>
+          
+          <motion.div 
+            className="flex flex-wrap gap-6 text-white/80 text-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full overflow-hidden relative border-2 border-white/30">
+                <Image
+                  src={post.author.avatar || "https://via.placeholder.com/80"}
+                  alt={post.author.name}
+                  fill
+                  className="object-cover"
+                />
               </div>
+              <span>{post.author.name}</span>
             </div>
-
-            {/* Title */}
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              {post.title}
-            </h1>
-
-            {/* Excerpt */}
-            <p className="text-xl text-gray-300 leading-relaxed">
-              {post.excerpt}
-            </p>
+            
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              <span>{formatDate(post.createdAt)}</span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              <span>{getReadingTime(post.content)} min read</span>
+            </div>
           </motion.div>
         </div>
       </div>
-
+      
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 py-16">
-        <motion.article
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="prose prose-lg prose-invert max-w-none"
-        >
-          <div className="text-gray-300 leading-relaxed">
-            <ReactMarkdown
-              components={{
-                h1: ({ children }) => (
-                  <h1 className="text-3xl font-bold text-white mb-6 mt-8">{children}</h1>
-                ),
-                h2: ({ children }) => (
-                  <h2 className="text-2xl font-bold text-white mb-4 mt-8">{children}</h2>
-                ),
-                h3: ({ children }) => (
-                  <h3 className="text-xl font-bold text-white mb-3 mt-6">{children}</h3>
-                ),
-                p: ({ children }) => (
-                  <p className="text-gray-300 mb-4 leading-relaxed">{children}</p>
-                ),
-                ul: ({ children }) => (
-                  <ul className="list-disc list-inside text-gray-300 mb-4 space-y-2">{children}</ul>
-                ),
-                ol: ({ children }) => (
-                  <ol className="list-decimal list-inside text-gray-300 mb-4 space-y-2">{children}</ol>
-                ),
-                li: ({ children }) => (
-                  <li className="text-gray-300">{children}</li>
-                ),
-                strong: ({ children }) => (
-                  <strong className="text-white font-semibold">{children}</strong>
-                ),
-                a: ({ children, href }) => (
-                  <a href={href} className="text-brand-red hover:text-red-400 underline transition-colors">
-                    {children}
-                  </a>
-                ),
-                blockquote: ({ children }) => (
-                  <blockquote className="border-l-4 border-brand-red pl-4 italic text-gray-400 my-6">
-                    {children}
-                  </blockquote>
-                ),
-                code: ({ children }) => (
-                  <code className="bg-gray-800 text-gray-300 px-2 py-1 rounded text-sm">
-                    {children}
-                  </code>
-                ),
-                pre: ({ children }) => (
-                  <pre className="bg-gray-800 text-gray-300 p-4 rounded-lg overflow-x-auto mb-4">
-                    {children}
-                  </pre>
-                )
-              }}
+      <div className="container mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Main Content */}
+          <div className="lg:col-span-2">
+            <Link href="/blogs">
+              <Button variant="ghost" className="mb-8 text-green-700 hover:text-green-800 hover:bg-green-50 -ml-2">
+                <ChevronLeft className="mr-2 h-4 w-4" />
+                Back to all articles
+              </Button>
+            </Link>
+            
+            <motion.div 
+              className="prose prose-lg max-w-none prose-headings:text-gray-800 prose-p:text-gray-600 prose-a:text-green-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
-              {post.content}
-            </ReactMarkdown>
+              <ReactMarkdown>
+                {post.content}
+              </ReactMarkdown>
+            </motion.div>
+            
+            {/* Share */}
+            <div className="mt-12 border-t border-gray-200 pt-8">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full overflow-hidden relative border border-gray-200">
+                    <Image
+                      src={post.author.avatar || "https://via.placeholder.com/80"}
+                      alt={post.author.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Written by</p>
+                    <p className="font-medium text-gray-900">{post.author.name}</p>
+                  </div>
+                </div>
+                
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Share2 className="h-4 w-4" />
+                  Share
+                </Button>
+              </div>
+            </div>
           </div>
-        </motion.article>
-
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-16 p-8 bg-dark-secondary border border-gray-800 rounded-xl text-center"
-        >
-          <h3 className="text-2xl font-bold text-white mb-4">
-            {currentLanguage === 'vi' 
-              ? 'Sẵn sàng thúc đẩy thương hiệu của bạn?' 
-              : 'Ready to grow your brand?'
-            }
-          </h3>
-          <p className="text-gray-300 mb-6">
-            {currentLanguage === 'vi'
-              ? 'Liên hệ với chúng tôi để tìm hiểu cách chúng tôi có thể giúp bạn đạt được mục tiêu quảng cáo TikTok.'
-              : 'Get in touch to learn how we can help you achieve your TikTok advertising goals.'
-            }
-          </p>
-          <Link href="/#contact">
-            <Button className="bg-brand-red hover:bg-red-600 text-white px-8">
-              {currentLanguage === 'vi' ? 'Liên hệ ngay' : 'Get In Touch'}
-            </Button>
-          </Link>
-        </motion.div>
+          
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24">
+              {/* Related Articles */}
+              {relatedPosts.length > 0 && (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+                  <div className="px-6 py-4 border-b border-gray-100">
+                    <h3 className="font-bold text-gray-900">Related Articles</h3>
+                  </div>
+                  
+                  <div className="divide-y divide-gray-100">
+                    {relatedPosts.map((related) => (
+                      <Link key={related.id} href={`/blogs/${related.slug}`}>
+                        <div className="p-6 hover:bg-gray-50 transition-colors">
+                          <Badge className="mb-2 bg-gray-100 text-gray-600 hover:bg-gray-200">
+                            {related.category}
+                          </Badge>
+                          <h4 className="font-medium text-gray-900 mb-1 line-clamp-2">
+                            {related.title}
+                          </h4>
+                          <p className="text-sm text-gray-500 line-clamp-2 mb-2">
+                            {related.excerpt}
+                          </p>
+                          <div className="flex items-center text-xs text-gray-400">
+                            <Calendar className="h-3 w-3 mr-1" />
+                            <span>{formatDate(related.createdAt)}</span>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Subscribe */}
+              <div className="bg-gradient-to-r from-green-600 to-emerald-700 rounded-xl p-6 text-white">
+                <h3 className="font-bold text-lg mb-2">Subscribe to Our Newsletter</h3>
+                <p className="text-green-50 text-sm mb-4">
+                  Get the latest articles and insights straight to your inbox.
+                </p>
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  className="w-full p-2 rounded bg-white/10 border border-white/20 text-white placeholder:text-green-200 text-sm mb-3"
+                />
+                <Button className="w-full bg-white text-green-700 hover:bg-gray-100">
+                  Subscribe
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

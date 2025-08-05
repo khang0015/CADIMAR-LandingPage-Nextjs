@@ -44,7 +44,7 @@ export default function HeroSection() {
   const edgeDots = createRandomDots(25, { minX: 0, maxX: 100, minY: 0, maxY: 100 });
 
   return (
-    <section className="pt-16 pb-8 h-screen flex items-center bg-gradient-to-br from-white via-green-50 to-emerald-100 relative overflow-hidden">
+    <section className="h-screen flex items-center bg-gradient-to-br from-white via-green-50 to-emerald-100 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 right-20 w-96 h-96 bg-green-500 rounded-full blur-3xl"></div>
@@ -148,33 +148,41 @@ export default function HeroSection() {
         </div>
       )}
       
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-6 items-center">
           {/* Left Content - Centered and Larger */}
-          <div className="space-y-8 text-center lg:text-left">
-            <div className="space-y-6">
+          <div className="space-y-4 text-center lg:text-left">
+            <div className="space-y-4">
               <AnimatedText delay={0.0}>
-                <div className="flex items-center justify-center lg:justify-start space-x-4 mb-6">
+                <div className="flex items-center justify-center lg:justify-start space-x-3 mb-4">
                   <div className="relative">
                     <Image 
                       src="/cadimar_logo.png" 
                       alt="CADIMAR Logo" 
-                      width={100}
-                      height={100}
+                      width={80}
+                      height={80}
                       priority
                       className="object-contain"
                     />
                   </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900">CADIMAR</h2>
-                    <p className="text-green-600 font-semibold text-sm uppercase tracking-wider">
-                      TikTok Ads Specialists
+                    <div className="flex flex-col items-center lg:items-start">
+                    <div className="mb-1">
+                      <Image 
+                      src="/cadimar_text.png" 
+                      alt="CADIMAR"
+                      width={160}
+                      height={82}
+                      className="object-contain"
+                      />
+                    </div>
+                    <p className="text-green-600 font-semibold text-sm uppercase tracking-wider mt-[-2px] lg:ml-2">
+                      Ads Specialists
                     </p>
-                  </div>
+                    </div>
                 </div>
               </AnimatedText>
               <AnimatedText delay={0.2}>
-                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900">
+                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
                   <span>Driving brand growth on</span><br />
                   <span className="text-green-600">meaningful</span><br />
                   <span>platforms</span>
@@ -183,7 +191,7 @@ export default function HeroSection() {
             </div>
             
             <AnimatedText delay={0.4}>
-              <p className="text-lg text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              <p className="text-base text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 We help you design effective sales channels on the world's most influential platforms and drive revenue through organic discovery and paid campaigns.
               </p>
             </AnimatedText>
@@ -242,18 +250,18 @@ export default function HeroSection() {
 
             {/* Stats */}
             <AnimatedText delay={0.8}>
-              <div className="grid grid-cols-3 gap-6 pt-4">
+              <div className="grid grid-cols-3 gap-4 pt-2">
                 <div className="text-center">
-                  <CountUp end={500} suffix="+" className="text-xl font-bold text-green-600" delay={1.5} />
-                  <p className="text-xs text-gray-500 mt-2">Campaigns</p>
+                  <CountUp end={500} suffix="+" className="text-lg font-bold text-green-600" delay={1.5} />
+                  <p className="text-xs text-gray-500 mt-1">Campaigns</p>
                 </div>
                 <div className="text-center">
-                  <CountUp end={50} suffix="M+" className="text-xl font-bold text-green-600" delay={1.7} />
-                  <p className="text-xs text-gray-500 mt-2">Views</p>
+                  <CountUp end={50} suffix="M+" className="text-lg font-bold text-green-600" delay={1.7} />
+                  <p className="text-xs text-gray-500 mt-1">Views</p>
                 </div>
                 <div className="text-center">
-                  <CountUp end={300} suffix="%" className="text-xl font-bold text-green-600" delay={1.9} />
-                  <p className="text-xs text-gray-500 mt-2">ROI Increase</p>
+                  <CountUp end={300} suffix="%" className="text-lg font-bold text-green-600" delay={1.9} />
+                  <p className="text-xs text-gray-500 mt-1">ROI Increase</p>
                 </div>
               </div>
             </AnimatedText>
@@ -261,13 +269,13 @@ export default function HeroSection() {
 
           {/* Right Content - TikTok Phone Mockup */}
           <motion.div 
-            className="relative flex justify-center items-center h-full max-h-96"
+            className="relative flex justify-center items-center h-full max-h-80"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            <div className="scale-50 lg:scale-75">
+            <div className="scale-40 lg:scale-60">
               <TikTokPhoneMockup />
             </div>
           </motion.div>

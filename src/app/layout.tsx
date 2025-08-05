@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CADIMAR - Digital Marketing Excellence",
+  title: "Digital Marketing Excellence",
   description: "Transform your business with powerful digital marketing solutions. We help businesses grow through innovative strategies and creative content.",
 };
 

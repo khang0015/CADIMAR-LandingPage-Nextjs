@@ -57,7 +57,7 @@ export default function Header() {
         />
       </div>
 
-      <nav className="container mx-auto px-6 py-4 relative">
+      <nav className="container mx-auto px-5 py-3 relative">
         <div className="flex items-center justify-between">
           {/* Enhanced Logo */}
           <Link href="/">
@@ -69,15 +69,15 @@ export default function Header() {
             >
               <div className="relative flex items-center">
                 <motion.div 
-                  className="w-14 h-14 rounded-lg flex items-center justify-center shadow-md overflow-hidden"
+                  className="w-12 h-12 rounded-lg flex items-center justify-center shadow-md overflow-hidden"
                   whileHover={{ rotate: 5 }}
                   transition={{ duration: 0.3 }}
                 >
                   <Image 
                     src="/cadimar_logo.png" 
                     alt="CADIMAR Logo" 
-                    width={56}
-                    height={56}
+                    width={48}
+                    height={48}
                     className="object-contain"
                   />
                 </motion.div>
@@ -96,17 +96,15 @@ export default function Header() {
                 />
               </div>
               <div className="flex flex-col justify-center h-full">
-                <span className="text-xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-brand-green bg-clip-text ">
-                  CADIMAR
+                <span className="flex items-center">
+                  <Image 
+                    src="/cadimar_text.png" 
+                    alt="CADIMAR"
+                    width={160}
+                    height={82}
+                    className="object-contain"
+                  />
                 </span>
-                <motion.div 
-                  className="flex items-center space-x-1 text-xs text-gray-500"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <Sparkles className="w-3 h-3 text-brand-green" />          
-                </motion.div>
               </div>
             </motion.div>
           </Link>

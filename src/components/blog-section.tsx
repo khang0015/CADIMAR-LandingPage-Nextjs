@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function BlogSection() {
   const blogPosts = [
@@ -11,21 +12,24 @@ export default function BlogSection() {
       excerpt: "Discover how emerging technologies are reshaping the business landscape and creating new opportunities for growth.",
       date: "Dec 15, 2024",
       readTime: "5 min read",
-      category: "Innovation"
+      category: "Innovation",
+      image: "/blogs/future_of_digital_innovation.png"
     },
     {
       title: "Digital Transformation Strategies",
       excerpt: "Learn the key strategies successful companies use to navigate their digital transformation journey.",
       date: "Dec 10, 2024",
       readTime: "7 min read",
-      category: "Strategy"
+      category: "Strategy",
+      image: "/blogs/digital_transformation.jpg"
     },
     {
       title: "AI in Modern Business",
       excerpt: "Explore how artificial intelligence is revolutionizing business operations and customer experiences.",
       date: "Dec 5, 2024",
       readTime: "6 min read",
-      category: "Technology"
+      category: "Technology",
+      image: "/blogs/AI_in_modern_business.jpg"
     }
   ];
 
@@ -66,7 +70,16 @@ export default function BlogSection() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
-              <div className="h-48 bg-gradient-to-br from-green-600 to-emerald-700"></div>
+              <div className="h-48 relative overflow-hidden">
+                <Image 
+                  src={post.image} 
+                  alt={post.title}
+                  fill
+                  className="object-cover transition-transform duration-500 hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+              </div>
               <div className="p-6">
                 <div className="flex items-center space-x-4 text-sm text-gray-400 mb-3">
                   <span className="bg-green-600/20 text-green-300 px-3 py-1 rounded-full text-xs font-medium border border-green-500/30">

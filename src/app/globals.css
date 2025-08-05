@@ -164,6 +164,19 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  
+  /* Fix for select dropdown layout shift */
+  .select-fix {
+    position: absolute;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+  }
+  
+  /* Force dropdown to use fixed positioning */
+  [data-radix-popper-content-wrapper] {
+    position: fixed !important;
+  }
 }
 
 

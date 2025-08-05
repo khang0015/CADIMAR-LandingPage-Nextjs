@@ -65,7 +65,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-20 relative overflow-hidden">
+    <section id="contact" className="py-12 relative overflow-hidden">
       {/* Background with gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-green-600 via-emerald-600 to-green-800"></div>
       
@@ -76,41 +76,42 @@ export default function ContactSection() {
         <div className="absolute -bottom-24 left-1/4 w-64 h-64 rounded-full bg-green-300"></div>
       </div>
       
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-4xl mx-auto">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-4xl mx-auto">{/* Prevent layout shift */}
+          <div className="select-fix"></div>
           <div className="text-center">
-            <div className="inline-block bg-white/90 px-6 py-2 rounded-full mb-4 shadow-md">
-              <p className="text-green-600 font-medium text-sm uppercase tracking-wider">
+            <div className="inline-block bg-white/90 px-5 py-1 rounded-full mb-3 shadow-md">
+              <p className="text-green-600 font-medium text-xs uppercase tracking-wider">
                 Ready to talk growth?
               </p>
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold mb-8 text-white drop-shadow-md">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white drop-shadow-md">
               {t("contact.title")}
             </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            <p className="text-base text-white/90 mb-4 max-w-2xl mx-auto">
               Let's discuss how we can help scale your business with effective TikTok advertising campaigns.
             </p>
-            <p className="text-lg text-white/90 mb-12 max-w-2xl mx-auto bg-black/20 backdrop-blur-sm rounded-lg px-6 py-3 inline-block">
+            <p className="text-sm text-white/90 mb-6 max-w-2xl mx-auto bg-black/20 backdrop-blur-sm rounded-lg px-4 py-2 inline-block">
               {t("contact.description")}
             </p>
           </div>
 
           {/* Contact Form */}
-          <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-8 md:p-10 shadow-2xl text-left border border-white/20 relative z-10 overflow-hidden">
+          <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 md:p-8 shadow-2xl text-left border border-white/20 relative z-10 overflow-hidden">
             {/* Form decorative elements */}
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-green-100 to-emerald-50 rounded-full opacity-40 z-0"></div>
             <div className="absolute -bottom-20 -left-10 w-60 h-60 bg-gradient-to-br from-green-100 to-emerald-50 rounded-full opacity-40 z-0"></div>
             
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="text-gray-700 font-semibold block mb-2 flex items-center">
-                  <span className="w-1 h-4 bg-green-600 mr-2 rounded-full"></span>
+                <label className="text-gray-700 font-semibold block mb-1 flex items-center text-sm">
+                  <span className="w-1 h-3 bg-green-600 mr-2 rounded-full"></span>
                   {t("form.name_label")}
                 </label>
                 <Input
                   type="text"
                   placeholder={t("form.name_placeholder")}
-                  className="border-gray-300 focus:ring-green-600 focus:border-green-600 transition-all"
+                  className="border-gray-300 focus:ring-green-600 focus:border-green-600 transition-all text-sm"
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   required
@@ -118,14 +119,14 @@ export default function ContactSection() {
               </div>
               
               <div>
-                <label className="text-gray-700 font-semibold block mb-2 flex items-center">
-                  <span className="w-1 h-4 bg-green-600 mr-2 rounded-full"></span>
+                <label className="text-gray-700 font-semibold block mb-1 flex items-center text-sm">
+                  <span className="w-1 h-3 bg-green-600 mr-2 rounded-full"></span>
                   {t("form.email_label")}
                 </label>
                 <Input
                   type="email"
                   placeholder={t("form.email_placeholder")}
-                  className="border-gray-300 focus:ring-green-600 focus:border-green-600 transition-all"
+                  className="border-gray-300 focus:ring-green-600 focus:border-green-600 transition-all text-sm"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   required
@@ -133,9 +134,9 @@ export default function ContactSection() {
               </div>
             </div>
             
-            <div className="mb-6">
-              <label className="text-gray-700 font-semibold block mb-2 flex items-center">
-                <span className="w-1 h-4 bg-green-600 mr-2 rounded-full"></span>
+            <div className="mb-4">
+              <label className="text-gray-700 font-semibold block mb-1 flex items-center text-sm">
+                <span className="w-1 h-3 bg-green-600 mr-2 rounded-full"></span>
                 {t("form.company_label")}
               </label>
               <Input
@@ -156,25 +157,25 @@ export default function ContactSection() {
                 <SelectTrigger className="border-gray-300 focus:ring-green-600 focus:border-green-600 transition-all">
                   <SelectValue placeholder={t("form.service_placeholder")} />
                 </SelectTrigger>
-                <SelectContent className="border-green-600/20">
-                  <SelectItem value="tiktok-ads" className="focus:bg-green-600/10">{t("form.tiktok_ads")}</SelectItem>
-                  <SelectItem value="google-ads" className="focus:bg-green-600/10">{t("form.google_ads")}</SelectItem>
-                  <SelectItem value="microsoft-ads" className="focus:bg-green-600/10">{t("form.microsoft_ads")}</SelectItem>
-                  <SelectItem value="facebook-ads" className="focus:bg-green-600/10">{t("form.facebook_ads")}</SelectItem>
-                  <SelectItem value="consultation" className="focus:bg-green-600/10">{t("form.consultation")}</SelectItem>
+                <SelectContent className="border-green-600/20 bg-white shadow-lg z-[100]" position="popper" sideOffset={5}>
+                  <SelectItem value="tiktok-ads" className="hover:bg-green-100 focus:bg-green-200">{t("form.tiktok_ads")}</SelectItem>
+                  <SelectItem value="google-ads" className="hover:bg-green-100 focus:bg-green-200">{t("form.google_ads")}</SelectItem>
+                  <SelectItem value="microsoft-ads" className="hover:bg-green-100 focus:bg-green-200">{t("form.microsoft_ads")}</SelectItem>
+                  <SelectItem value="facebook-ads" className="hover:bg-green-100 focus:bg-green-200">{t("form.facebook_ads")}</SelectItem>
+                  <SelectItem value="consultation" className="hover:bg-green-100 focus:bg-green-200">{t("form.consultation")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             
-            <div className="mb-6">
-              <label className="text-gray-700 font-semibold block mb-2 flex items-center">
-                <span className="w-1 h-4 bg-green-600 mr-2 rounded-full"></span>
+            <div className="mb-4">
+              <label className="text-gray-700 font-semibold block mb-1 flex items-center text-sm">
+                <span className="w-1 h-3 bg-green-600 mr-2 rounded-full"></span>
                 {t("form.message_label")}
               </label>
               <Textarea
-                rows={4}
+                rows={3}
                 placeholder={t("form.message_placeholder")}
-                className="border-gray-300 focus:ring-green-600 focus:border-green-600 transition-all resize-vertical"
+                className="border-gray-300 focus:ring-green-600 focus:border-green-600 transition-all resize-vertical text-sm"
                 value={formData.message}
                 onChange={(e) => handleInputChange("message", e.target.value)}
                 required
@@ -222,16 +223,16 @@ export default function ContactSection() {
           </form>
           
           {/* Contact info pills */}
-          <div className="flex flex-wrap justify-center gap-4 mt-12">
-            <div className="bg-green-600/90 backdrop-blur-sm px-6 py-3 rounded-full text-white shadow-lg flex items-center space-x-2 hover:bg-green-600 transition-all duration-300 border border-white/20">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+          <div className="flex flex-wrap justify-center gap-3 mt-8">
+            <div className="bg-green-600/90 backdrop-blur-sm px-4 py-2 rounded-full text-white shadow-lg flex items-center space-x-2 hover:bg-green-600 transition-all duration-300 border border-white/20 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
               </svg>
               <span className="font-medium">support@cadimar.net</span>
             </div>
-            <div className="bg-green-600/90 backdrop-blur-sm px-6 py-3 rounded-full text-white shadow-lg flex items-center space-x-2 hover:bg-green-600 transition-all duration-300 border border-white/20">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+            <div className="bg-green-600/90 backdrop-blur-sm px-4 py-2 rounded-full text-white shadow-lg flex items-center space-x-2 hover:bg-green-600 transition-all duration-300 border border-white/20 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
               </svg>
               <span className="font-medium">+84 868283784</span>

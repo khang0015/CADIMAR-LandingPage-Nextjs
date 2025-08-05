@@ -14,15 +14,22 @@ export default function Footer() {
           <div className="md:col-span-1">
             <div className="flex items-center space-x-3 mb-6">
               <div className="w-16 h-16 relative flex-shrink-0">
-                <Image
-                  src="/cadimar_logo.png"
-                  alt="CADIMAR Logo"
-                  width={64}
-                  height={64}
-                  className="object-contain"
-                />
+              <Image
+                src="/cadimar_logo.png"
+                alt="CADIMAR Logo"
+                width={64}
+                height={64}
+                className="object-contain"
+              />
               </div>
-              <span className="text-xl font-bold">CADIMAR</span>
+              <Image 
+              src="/cadimar_text.png" 
+              alt="CADIMAR"
+              width={160} // tăng kích thước
+              height={48}
+              className="object-contain filter invert brightness-0"
+              style={{ filter: "invert(1) brightness(2)" }} // chuyển sang màu trắng (nếu ảnh gốc là đen)
+              />
             </div>
             <p className="text-gray-400 leading-relaxed mb-6">
               Professional digital innovation agency helping brands grow through strategic technology solutions and proven digital transformation.

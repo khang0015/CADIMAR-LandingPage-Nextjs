@@ -49,9 +49,9 @@ export default function TikTokPhoneMockup() {
   return (
     <div className="relative">
       {/* Phone Frame */}
-      <div className="relative w-72 h-[640px] bg-black rounded-[3rem] p-2 shadow-2xl">
+      <div className="relative w-60 h-[530px] bg-black rounded-[2.5rem] p-2 shadow-2xl">
         {/* Screen */}
-        <div className="w-full h-full bg-gray-900 rounded-[2.5rem] overflow-hidden relative">
+        <div className="w-full h-full bg-gray-900 rounded-[2rem] overflow-hidden relative">
           
           {/* Video Background */}
           <motion.div
@@ -98,46 +98,46 @@ export default function TikTokPhoneMockup() {
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
-                  className="text-4xl mb-4"
+                  className="text-3xl mb-3"
                 >
                   🚀
                 </motion.div>
-                <h3 className="text-xl font-bold mb-2">{currentVideoData.title}</h3>
-                <p className="text-sm opacity-90">{currentVideoData.description}</p>
+                <h3 className="text-lg font-bold mb-1">{currentVideoData.title}</h3>
+                <p className="text-xs opacity-90">{currentVideoData.description}</p>
               </motion.div>
             </div>
 
             {/* Bottom Content */}
             <div className="space-y-4">
               {/* User Info */}
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5" />
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="font-semibold">{currentVideoData.user}</p>
-                  <p className="text-xs opacity-75">Follow for more content</p>
+                  <p className="font-semibold text-xs">{currentVideoData.user}</p>
+                  <p className="text-[10px] opacity-75">Follow for more content</p>
                 </div>
                 <motion.button
                   whileTap={{ scale: 0.9 }}
-                  className="ml-auto bg-red-500 text-white px-4 py-1 rounded-full text-sm font-semibold"
+                  className="ml-auto bg-red-500 text-white px-2 py-0.5 rounded-full text-xs font-semibold"
                 >
                   Follow
                 </motion.button>
               </div>
 
               {/* Music Bar */}
-              <div className="flex items-center space-x-2 bg-black/20 rounded-full p-2">
-                <Music className="w-4 h-4" />
+              <div className="flex items-center space-x-1 bg-black/20 rounded-full p-1">
+                <Music className="w-3 h-3" />
                 <div className="flex-1">
                   <motion.div
-                    animate={{ x: [-100, 100] }}
+                    animate={{ x: [-50, 50] }}
                     transition={{ 
                       duration: 3, 
                       repeat: Infinity, 
                       ease: "linear" 
                     }}
-                    className="text-xs truncate"
+                    className="text-[10px] truncate"
                   >
                     Original sound - Trending viral music ✨
                   </motion.div>
@@ -147,51 +147,51 @@ export default function TikTokPhoneMockup() {
           </div>
 
           {/* Right Side Actions */}
-          <div className="absolute right-3 bottom-24 space-y-6">
+          <div className="absolute right-2 bottom-20 space-y-4">
             <motion.div
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="flex flex-col items-center space-y-1"
+              className="flex flex-col items-center space-y-0.5"
             >
-              <div className="w-12 h-12 bg-gray-800/50 rounded-full flex items-center justify-center backdrop-blur">
-                <Heart className="w-6 h-6 text-red-500 fill-current" />
+              <div className="w-8 h-8 bg-gray-800/50 rounded-full flex items-center justify-center backdrop-blur">
+                <Heart className="w-4 h-4 text-red-500 fill-current" />
               </div>
-              <span className="text-xs font-semibold">{currentVideoData.likes}</span>
+              <span className="text-[10px] font-semibold">{currentVideoData.likes}</span>
             </motion.div>
 
             <motion.div
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="flex flex-col items-center space-y-1"
+              className="flex flex-col items-center space-y-0.5"
             >
-              <div className="w-12 h-12 bg-gray-800/50 rounded-full flex items-center justify-center backdrop-blur">
-                <MessageCircle className="w-6 h-6" />
+              <div className="w-8 h-8 bg-gray-800/50 rounded-full flex items-center justify-center backdrop-blur">
+                <MessageCircle className="w-4 h-4" />
               </div>
-              <span className="text-xs font-semibold">{currentVideoData.comments}</span>
+              <span className="text-[10px] font-semibold">{currentVideoData.comments}</span>
             </motion.div>
 
             <motion.div
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="flex flex-col items-center space-y-1"
+              className="flex flex-col items-center space-y-0.5"
             >
-              <div className="w-12 h-12 bg-gray-800/50 rounded-full flex items-center justify-center backdrop-blur">
-                <Share className="w-6 h-6" />
+              <div className="w-8 h-8 bg-gray-800/50 rounded-full flex items-center justify-center backdrop-blur">
+                <Share className="w-4 h-4" />
               </div>
-              <span className="text-xs font-semibold">{currentVideoData.shares}</span>
+              <span className="text-[10px] font-semibold">{currentVideoData.shares}</span>
             </motion.div>
           </div>
 
           {/* Progress Indicators */}
-          <div className="absolute bottom-4 left-4 flex space-x-1">
+          <div className="absolute bottom-2 left-2 flex space-x-1">
             {videos.map((_, index) => (
               <motion.div
                 key={index}
-                className={`h-1 rounded-full ${
-                  index === currentVideo ? 'bg-white w-8' : 'bg-white/40 w-1'
+                className={`h-0.5 rounded-full ${
+                  index === currentVideo ? 'bg-white w-6' : 'bg-white/40 w-1'
                 }`}
                 animate={{
-                  width: index === currentVideo ? 32 : 4,
+                  width: index === currentVideo ? 24 : 4,
                   opacity: index === currentVideo ? 1 : 0.4
                 }}
                 transition={{ duration: 0.3 }}
@@ -201,7 +201,7 @@ export default function TikTokPhoneMockup() {
         </div>
 
         {/* Phone Details */}
-        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-gray-600 rounded-full"></div>
+        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-16 h-0.5 bg-gray-600 rounded-full"></div>
       </div>
 
       {/* Floating Interaction Elements */}
@@ -215,14 +215,14 @@ export default function TikTokPhoneMockup() {
           repeat: Infinity,
           ease: "easeInOut"
         }}
-        className="absolute -top-6 -right-6 bg-pink-500 rounded-full w-12 h-12 flex items-center justify-center shadow-lg"
+        className="absolute -top-4 -right-4 bg-pink-500 rounded-full w-8 h-8 flex items-center justify-center shadow-lg"
       >
-        <Heart className="w-6 h-6 text-white fill-current" />
+        <Heart className="w-4 h-4 text-white fill-current" />
       </motion.div>
 
       <motion.div
         animate={{
-          y: [0, 15, 0],
+          y: [0, 10, 0],
           x: [0, -5, 0]
         }}
         transition={{
@@ -231,9 +231,9 @@ export default function TikTokPhoneMockup() {
           ease: "easeInOut",
           delay: 1
         }}
-        className="absolute -bottom-8 -left-8 bg-blue-500 rounded-full w-10 h-10 flex items-center justify-center shadow-lg"
+        className="absolute -bottom-6 -left-6 bg-blue-500 rounded-full w-7 h-7 flex items-center justify-center shadow-lg"
       >
-        <Share className="w-5 h-5 text-white" />
+        <Share className="w-3 h-3 text-white" />
       </motion.div>
 
       <motion.div
@@ -247,9 +247,9 @@ export default function TikTokPhoneMockup() {
           ease: "easeInOut",
           delay: 2
         }}
-        className="absolute top-1/2 -left-12 bg-yellow-400 rounded-full w-8 h-8 flex items-center justify-center shadow-lg"
+        className="absolute top-1/2 -left-8 bg-yellow-400 rounded-full w-6 h-6 flex items-center justify-center shadow-lg"
       >
-        <Plus className="w-4 h-4 text-gray-800" />
+        <Plus className="w-3 h-3 text-gray-800" />
       </motion.div>
     </div>
   );
