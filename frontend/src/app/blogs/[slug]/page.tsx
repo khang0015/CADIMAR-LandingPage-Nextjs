@@ -17,6 +17,8 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { ApiClient } from "@/lib/api-client";
+import Header from "@/components/mainpage/header";
+import Footer from "@/components/mainpage/footer";
 import { getImageUrl, formatDate, getFirstTag } from "@/lib/blog-helpers";
 
 interface BlogPost {
@@ -105,72 +107,80 @@ export default function BlogPostPage({ params }: Props) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center">
-        <div className="animate-pulse space-y-8 max-w-3xl mx-auto p-8">
-          <div className="h-8 bg-gray-200 rounded-lg w-3/4"></div>
-          <div className="h-60 bg-gray-200 rounded-lg"></div>
-          <div className="space-y-4">
-            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-            <div className="h-4 bg-gray-200 rounded w-full"></div>
-            <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+      <div className="min-h-screen bg-white text-gray-900">
+        <Header />
+        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center">
+          <div className="animate-pulse space-y-8 max-w-3xl mx-auto p-8">
+            <div className="h-8 bg-gray-200 rounded-lg w-3/4"></div>
+            <div className="h-60 bg-gray-200 rounded-lg"></div>
+            <div className="space-y-4">
+              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+              <div className="h-4 bg-gray-200 rounded w-full"></div>
+              <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+            </div>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   if (error || !post) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            {error || 'Post not found'}
-          </h1>
-          <Link 
-            href="/blogs"
-            className="text-blue-600 hover:text-blue-800 underline"
-          >
-            Back to blogs
-          </Link>
+      <div className="min-h-screen bg-white text-gray-900">
+        <Header />
+        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              {error || 'Post not found'}
+            </h1>
+            <Link 
+              href="/blogs"
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              Back to blogs
+            </Link>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-      {/* Header with back button */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <Link 
-            href="/blogs" 
-            className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+    <div className="min-h-screen bg-white text-gray-900">
+      <Header />
+      <div className="bg-gradient-to-b from-gray-50 to-gray-100 pt-20">
+        {/* Main content */}
+        <article className="max-w-4xl mx-auto px-4 py-12">
+          {/* Article header */}
+          <motion.header 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-8"
           >
-            <ChevronLeft className="w-4 h-4 mr-2" />
-            Back to Blogs
-          </Link>
-        </div>
-      </div>
-
-      {/* Main content */}
-      <article className="max-w-4xl mx-auto px-4 py-12">
-        {/* Article header */}
-        <motion.header 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8"
-        >
-          <div className="mb-4">
-            <span className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-2">
-              {getFirstTag(post.tags)}
-            </span>
-            {post.featured && (
-              <span className="inline-block ml-2 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                <Star className="w-3 h-3 mr-1 inline" fill="currentColor" />
-                Featured
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <span className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mb-2">
+                {getFirstTag(post.tags)}
               </span>
-            )}
+              {post.featured && (
+                <span className="inline-block ml-2 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                  <Star className="w-3 h-3 mr-1 inline" fill="currentColor" />
+                  Featured
+                </span>
+              )}
+            </div>
+            
+            {/* Back button */}
+            <Link 
+              href="/blogs" 
+              className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4 mr-2" />
+              Back to Blogs
+            </Link>
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
@@ -267,16 +277,18 @@ export default function BlogPostPage({ params }: Props) {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="mb-8"
           >
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Tags</h3>
-            <div className="flex flex-wrap gap-2">
-              {post.tags.split(',').map((tag, index) => (
-                <span 
-                  key={index}
-                  className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
-                >
-                  {tag.trim()}
-                </span>
-              ))}
+            <div className="flex items-center flex-wrap gap-4">
+              <h3 className="text-lg font-semibold text-gray-900">Tags:</h3>
+              <div className="flex flex-wrap gap-2">
+                {post.tags.split(',').map((tag, index) => (
+                  <span 
+                    key={index}
+                    className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                  >
+                    {tag.trim()}
+                  </span>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
@@ -351,34 +363,8 @@ export default function BlogPostPage({ params }: Props) {
           </motion.section>
         )}
       </article>
-
-      {/* Newsletter subscription */}
-      <div className="bg-gradient-to-r from-blue-600 to-green-600 py-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1 }}
-          >
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Stay Updated with Our Latest Insights
-            </h2>
-            <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
-              Subscribe to our newsletter and never miss our latest articles on digital innovation, technology trends, and business transformation.
-            </p>
-            <div className="max-w-md mx-auto space-y-4">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
-              />
-              <button className="w-full bg-white text-blue-700 hover:bg-gray-100 py-3 px-6 rounded-lg text-base font-medium transition-colors">
-                Subscribe Now
-              </button>
-            </div>
-          </motion.div>
-        </div>
       </div>
+      <Footer />
     </div>
   );
 }

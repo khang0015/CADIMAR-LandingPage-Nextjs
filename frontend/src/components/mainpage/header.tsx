@@ -131,21 +131,27 @@ export default function Header() {
               </motion.button>
             </Link>
             <motion.button 
-              onClick={() => scrollToSection("services")} 
+              onClick={() => {
+              if (window.location.pathname !== '/') {
+                window.location.href = '/#services';
+              } else {
+                scrollToSection("services");
+              }
+              }} 
               className="px-4 py-2 rounded-full text-gray-600 hover:text-brand-green hover:bg-green-50 transition-all duration-200 relative overflow-hidden"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               <motion.span
-                className="relative z-10"
-                whileHover={{ y: -1 }}
+              className="relative z-10"
+              whileHover={{ y: -1 }}
               >
-                {t("nav.services")}
+              {t("nav.services")}
               </motion.span>
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-brand-green/10 to-green-200/20 opacity-0"
-                whileHover={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
+              className="absolute inset-0 bg-gradient-to-r from-brand-green/10 to-green-200/20 opacity-0"
+              whileHover={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
               />
             </motion.button>
             <Link href="/blogs">
@@ -168,28 +174,52 @@ export default function Header() {
                 />
               </motion.button>
             </Link>
-            <button 
-              onClick={() => scrollToSection("testimonials")} 
-              className="px-4 py-2 rounded-full text-gray-600 hover:text-brand-green hover:bg-green-50 transition-colors"
-            >
-              {t("nav.testimonials")}
-            </button>
             <motion.button 
-              onClick={() => scrollToSection("contact")} 
+              onClick={() => {
+              if (window.location.pathname !== '/') {
+                window.location.href = '/#testimonials';
+              } else {
+                scrollToSection("testimonials");
+              }
+              }} 
               className="px-4 py-2 rounded-full text-gray-600 hover:text-brand-green hover:bg-green-50 transition-all duration-200 relative overflow-hidden"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               <motion.span
-                className="relative z-10"
-                whileHover={{ y: -1 }}
+              className="relative z-10"
+              whileHover={{ y: -1 }}
               >
-                {t("nav.contact")}
+              {t("nav.testimonials")}
               </motion.span>
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-brand-green/10 to-green-200/20 opacity-0"
-                whileHover={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
+              className="absolute inset-0 bg-gradient-to-r from-brand-green/10 to-green-200/20 opacity-0"
+              whileHover={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
+              />
+            </motion.button>
+            <motion.button 
+              onClick={() => {
+              if (window.location.pathname !== '/') {
+                window.location.href = '/#contact';
+              } else {
+                scrollToSection("contact");
+              }
+              }} 
+              className="px-4 py-2 rounded-full text-gray-600 hover:text-brand-green hover:bg-green-50 transition-all duration-200 relative overflow-hidden"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <motion.span
+              className="relative z-10"
+              whileHover={{ y: -1 }}
+              >
+              {t("nav.contact")}
+              </motion.span>
+              <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-brand-green/10 to-green-200/20 opacity-0"
+              whileHover={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
               />
             </motion.button>
           </div>
@@ -206,7 +236,13 @@ export default function Header() {
             */}
             
             <Button 
-              onClick={() => scrollToSection("contact")}
+              onClick={() => {
+              if (window.location.pathname !== '/') {
+                window.location.href = '/#contact';
+              } else {
+                scrollToSection("contact");
+              }
+              }}
               className="bg-brand-green hover:bg-brand-green-dark text-white font-medium"
             >
               {t("cta.get_in_touch")}

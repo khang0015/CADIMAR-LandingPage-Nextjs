@@ -48,7 +48,7 @@ export const translations = {
     
     // Testimonials
     "testimonials.tagline": "TESTIMONIALS",
-    "testimonials.title": "Success, in our clients’ own words",
+    "testimonials.title": "Success, in our client's own words",
     
     // Insights
     "insights.tagline": "OUR THOUGHTS",

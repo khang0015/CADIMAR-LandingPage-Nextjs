@@ -14,6 +14,39 @@ export default function HeroSection() {
   const { t } = useTranslations();
   const [mounted, setMounted] = useState(false);
 
+  const MorphingText = () => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    
+    const words = ["smart", "scalable", "creative", "data-driven", "AI-powered", "high-impact"];
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setCurrentIndex((prev) => (prev + 1) % words.length);
+          setIsTransitioning(false);
+        }, 300);
+      }, 2200);
+
+      return () => clearInterval(interval);
+    }, []);
+
+    return (
+      <span className="relative inline-block min-w-[140px]">
+        <span 
+          className={`text-green-600 font-bold transition-all duration-300 ease-in-out inline-block ${
+            isTransitioning 
+              ? 'opacity-0 scale-125 blur-sm' 
+              : 'opacity-100 scale-100 blur-0'
+          }`}
+        >
+          {words[currentIndex]}
+        </span>
+      </span>
+    );
+  };
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -183,12 +216,11 @@ export default function HeroSection() {
               </AnimatedText>
               <AnimatedText delay={0.2}>
                 <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
-                  <span>Maximizing growth through</span><br />
-                  <div className="text-green-600 space-y-1">
-                    <span>smart</span><br />
-                    <span>scalable</span>
-                  </div>
-                  <span>ad strategies</span>
+                  <span>Driving your</span><br />
+                  <span>growth</span><br />
+                  <span>with</span><br />
+                  <MorphingText /><br />
+                  <span> ad strategies</span>
                 </h1>
               </AnimatedText>
             </div>

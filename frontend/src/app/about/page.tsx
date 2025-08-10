@@ -6,6 +6,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
+import Header from "@/components/mainpage/header";
+import Footer from "@/components/mainpage/footer";
 import { 
   Users, 
   Target, 
@@ -84,7 +86,9 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white text-gray-900">
+      <Header />
+      
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-white via-green-50 to-green-100 pt-20">
         <div className="max-w-6xl mx-auto px-4 py-16">
@@ -342,6 +346,8 @@ export default function AboutPage() {
           </motion.div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 } 

@@ -12,7 +12,7 @@ export default function TestimonialsSection() {
 
   const testimonials = [
     {
-      name: "Jakub Wieckowski",
+      name: "James Smith",
       title: "Shopify Expert",
       review: "Exceptional TikTok advertising results! Our revenue increased by 300% within the first quarter. The team's expertise and strategic approach made all the difference.",
       initial: "J",
@@ -20,20 +20,20 @@ export default function TestimonialsSection() {
       image: "/testimonials/OIP1.jpg"
     },
     {
-      name: "Luca Caporale", 
+      name: "Zhang Wei", 
       title: "Salesforce Business Administrator at AALTO SRL",
       review: "Professional service with outstanding results. They transformed our social media presence and delivered measurable ROI. Highly recommend their TikTok advertising expertise.",
       initial: "L",
       bgColor: "from-indigo-500 to-blue-600",
-      image: "/avatars/alex.jpg"
+      image: "/testimonials/OIP.jpg"
     },
     {
-      name: "Sarkawt Shaban",
+      name: "Nguyen Huy Hoang",
       title: "CEO at PROTEX Co.",
       review: "The team delivered beyond expectations. Their strategic approach to TikTok advertising helped us reach new audiences and significantly boost our brand awareness.",
       initial: "S",
       bgColor: "from-blue-500 to-cyan-600",
-      image: "/avatars/sarah.jpg"
+      image: "/testimonials/OIP3.jpg"
     }
   ];
 

@@ -13,6 +13,8 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { ApiClient } from "@/lib/api-client";
+import Header from "@/components/mainpage/header";
+import Footer from "@/components/mainpage/footer";
 import { getImageUrl, formatDate, getFirstTag } from "@/lib/blog-helpers";
 
 interface BlogPost {
@@ -71,9 +73,9 @@ export default function BlogsPage() {
 
   if (searchTerm) {
     filteredPosts = filteredPosts.filter(post =>
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.tags.toLowerCase().includes(searchTerm.toLowerCase())
+      (post.title && post.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (post.excerpt && post.excerpt.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (post.tags && post.tags.toLowerCase().includes(searchTerm.toLowerCase()))
     );
   }
 
@@ -141,29 +143,13 @@ export default function BlogsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-green-600 py-20">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <motion.div
+    <div className="min-h-screen bg-white text-gray-900">
+      <Header />
+      <div className="bg-gradient-to-b from-gray-50 to-gray-100 pt-20">
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          {/* Search and Filter Bar */}
+          <motion.div 
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Our Latest Insights
-            </h1>
-            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Discover the latest trends, technologies, and strategies that are shaping the future of digital innovation and business transformation.
-            </p>
-          </motion.div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* Search and Filter Bar */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-12"
@@ -390,34 +376,8 @@ export default function BlogsPage() {
           </motion.div>
         )}
       </div>
-
-      {/* Newsletter CTA */}
-      <div className="bg-gradient-to-r from-blue-600 to-green-600 py-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-          >
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Stay Updated with Our Latest Insights
-            </h2>
-            <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
-              Subscribe to our newsletter and never miss our latest articles on digital innovation, technology trends, and business transformation.
-            </p>
-            <div className="max-w-md mx-auto space-y-4">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
-              />
-              <button className="w-full bg-white text-blue-700 hover:bg-gray-100 py-3 px-6 rounded-lg text-base font-medium transition-colors">
-                Subscribe Now
-              </button>
-            </div>
-          </motion.div>
-        </div>
       </div>
+      <Footer />
     </div>
   );
 }
