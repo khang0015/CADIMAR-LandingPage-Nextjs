@@ -1,0 +1,1 @@
+ALTER TABLE `contacts` ADD `service_interested` varchar(100);
