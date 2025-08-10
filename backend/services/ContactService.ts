@@ -34,7 +34,7 @@ export class ContactService {
   /**
    * Get contact by ID
    */
-  static async getById(id: string) {
+  static async getById(id: number) {
     const result = await db
       .select()
       .from(contacts)
@@ -48,10 +48,7 @@ export class ContactService {
    * Create new contact
    */
   static async create(data: CreateContactData) {
-    const id = nanoid();
-    
     const newContact: NewContact = {
-      id,
       name: data.name,
       email: data.email,
       phone: data.phone,
@@ -64,14 +61,14 @@ export class ContactService {
       responded: false,
     };
     
-    await db.insert(contacts).values(newContact);
-    return await this.getById(id);
+    const result = await db.insert(contacts).values(newContact);
+    return result;
   }
 
   /**
    * Update contact
    */
-  static async update(id: string, data: Partial<CreateContactData & {
+  static async update(id: number, data: Partial<CreateContactData & {
     status?: 'new' | 'in-progress' | 'responded' | 'closed';
     priority?: 'low' | 'normal' | 'high';
     responded?: boolean;
@@ -96,7 +93,7 @@ export class ContactService {
   /**
    * Delete contact
    */
-  static async delete(id: string) {
+  static async delete(id: number) {
     await db.delete(contacts).where(eq(contacts.id, id));
     return true;
   }
@@ -122,7 +119,7 @@ export class ContactService {
   /**
    * Mark contact as responded
    */
-  static async markAsResponded(id: string, respondedBy: string, adminNote?: string) {
+  static async markAsResponded(id: number, respondedBy: string, adminNote?: string) {
     return await this.update(id, {
       status: 'responded',
       responded: true,
