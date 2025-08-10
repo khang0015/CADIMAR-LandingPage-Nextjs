@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://cadimar.net/sitemap.xml
+
+# Priority pages
+Allow: /
+Allow: /about
+Allow: /blogs
+
+# Crawl delay
+Crawl-delay: 1
+
+# Important: Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /

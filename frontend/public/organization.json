@@ -1,0 +1,28 @@
+{
+  "name": "CADIMAR Digital Marketing Agency",
+  "description": "CADIMAR is Vietnam's premier digital marketing agency specializing in TikTok Ads, Facebook Ads, and content marketing. CADIMAR delivers 300% ROI growth for businesses.",
+  "url": "https://cadimar.net",
+  "logo": "https://cadimar.net/cadimar_logo.png",
+  "sameAs": [
+    "https://cadimar.net",
+    "https://www.cadimar.net"
+  ],
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+84868283784",
+    "contactType": "customer service",
+    "email": "support@cadimar.net"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "VN",
+    "addressLocality": "Ho Chi Minh City"
+  },
+  "founder": {
+    "@type": "Person",
+    "name": "CADIMAR Team"
+  },
+  "keywords": "CADIMAR, digital marketing agency vietnam, tiktok ads expert, facebook ads specialist"
+}

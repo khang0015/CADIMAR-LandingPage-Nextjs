@@ -56,10 +56,19 @@ fi
 echo -e "\n${YELLOW}🧹 Step 4: Cleaning up old version on server...${NC}"
 ssh $SERVER_USER@$SERVER_IP << 'EOF'
     echo "Stopping and removing old container..."
-    docker-compose down 2>/dev/null || echo "No running container found"
+    docker stop cadimar-production 2>/dev/null || echo "No running container found"
+    docker rm cadimar-production 2>/dev/null || echo "No container to remove"
+    
+    # Force stop any containers using the image
+    CONTAINERS=$(docker ps -a --filter ancestor=cadimar-landing-page:latest -q)
+    if [ ! -z "$CONTAINERS" ]; then
+        echo "Force stopping containers using old image..."
+        docker stop $CONTAINERS 2>/dev/null || true
+        docker rm $CONTAINERS 2>/dev/null || true
+    fi
     
     echo "Removing old Docker image..."
-    docker rmi cadimar-landing-page:latest 2>/dev/null || echo "No old image found"
+    docker rmi cadimar-landing-page:latest --force 2>/dev/null || echo "No old image found"
     
     echo "Cleaning up old files..."
     rm -f cadimar-app.tar.gz docker-compose.prod.yml
@@ -98,21 +107,35 @@ ssh $SERVER_USER@$SERVER_IP << 'EOF'
     echo "Loading new Docker image..."
     gunzip -c cadimar-app.tar.gz | docker load
     
-    echo "Starting new container..."
-    docker-compose -f docker-compose.prod.yml up -d
+    echo "Starting new container with docker compose..."
+    docker compose -f docker-compose.prod.yml up -d --force-recreate
     
     echo "Waiting for container to be ready..."
-    sleep 10
+    sleep 15
     
     echo "Checking container status..."
-    docker ps | grep cadimar-production
+    docker ps --filter name=cadimar-production
     
-    echo "Testing application..."
-    if curl -f http://localhost:3000/api/languages > /dev/null 2>&1; then
-        echo "✅ Application is responding"
-    else
-        echo "⚠️  Application may still be starting up"
-    fi
+    echo "Getting container logs..."
+    docker logs cadimar-production --tail 10
+    
+    echo "Testing application health..."
+    for i in {1..10}; do
+        if curl -f http://localhost:3000/api/languages > /dev/null 2>&1; then
+            echo "✅ Application is responding (attempt $i)"
+            break
+        else
+            echo "⏳ Waiting for application startup (attempt $i/10)..."
+            sleep 5
+        fi
+    done
+    
+    # Force restart Nginx to pick up new container
+    echo "Restarting Nginx to ensure proxy works..."
+    systemctl restart nginx 2>/dev/null || service nginx restart 2>/dev/null || echo "Could not restart Nginx"
+    
+    echo "Final container status check..."
+    docker ps --filter name=cadimar-production --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
     
     echo "Cleaning up deployment files..."
     rm -f cadimar-app.tar.gz
@@ -129,19 +152,47 @@ fi
 echo -e "\n${YELLOW}🔍 Step 7: Final verification...${NC}"
 echo "Testing website accessibility..."
 
-# Test local server response
-if curl -f http://$SERVER_IP:3000/api/languages > /dev/null 2>&1; then
-    echo -e "${GREEN}✅ Direct server access working${NC}"
-else
-    echo -e "${YELLOW}⚠️  Direct server access not responding (may still be starting)${NC}"
-fi
+# Wait a bit more for everything to settle
+sleep 10
 
-# Test HTTPS domain
-if curl -f --resolve cadimar.net:443:$SERVER_IP https://cadimar.net > /dev/null 2>&1; then
-    echo -e "${GREEN}✅ HTTPS domain access working${NC}"
-else
-    echo -e "${YELLOW}⚠️  HTTPS domain access not responding (DNS/SSL issue)${NC}"
-fi
+# Test local server response with retries
+echo "Testing direct server access..."
+for i in {1..5}; do
+    if curl -f http://$SERVER_IP:3000/api/languages > /dev/null 2>&1; then
+        echo -e "${GREEN}✅ Direct server access working (attempt $i)${NC}"
+        break
+    else
+        echo -e "${YELLOW}⏳ Retrying direct server access (attempt $i/5)...${NC}"
+        sleep 5
+    fi
+done
+
+# Test HTTPS domain with retries
+echo "Testing HTTPS domain access..."
+for i in {1..5}; do
+    if curl -f --resolve cadimar.net:443:$SERVER_IP https://cadimar.net > /dev/null 2>&1; then
+        echo -e "${GREEN}✅ HTTPS domain access working (attempt $i)${NC}"
+        break
+    else
+        echo -e "${YELLOW}⏳ Retrying HTTPS domain access (attempt $i/5)...${NC}"
+        sleep 5
+    fi
+done
+
+# Additional verification - check if container is actually running the new code
+echo "Verifying container is running new image..."
+ssh $SERVER_USER@$SERVER_IP << 'EOF'
+    NEW_CONTAINER_ID=$(docker ps --filter name=cadimar-production --format "{{.ID}}")
+    if [ ! -z "$NEW_CONTAINER_ID" ]; then
+        echo "Container ID: $NEW_CONTAINER_ID"
+        echo "Image: $(docker inspect $NEW_CONTAINER_ID --format '{{.Config.Image}}')"
+        echo "Created: $(docker inspect $NEW_CONTAINER_ID --format '{{.Created}}')"
+        echo "✅ New container is running"
+    else
+        echo "❌ No container found with name cadimar-production"
+        exit 1
+    fi
+EOF
 
 # Step 8: Cleanup local files
 echo -e "\n${YELLOW}🧹 Step 8: Cleaning up local files...${NC}"
