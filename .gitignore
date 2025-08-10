@@ -34,11 +34,6 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# local env files
-.env*.local
-/frontend/.env*.local
-/backend/.env*.local
-
 # vercel
 .vercel
 
