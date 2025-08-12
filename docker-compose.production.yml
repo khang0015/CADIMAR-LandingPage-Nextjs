@@ -1,0 +1,27 @@
+services:
+  # Backend API
+  backend:
+    image: cadimar-landingpage-nextjs-backend:latest
+    container_name: cadimar-backend
+    restart: unless-stopped
+    network_mode: "host"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - BACKEND_PORT=5000
+      - DB_HOST=127.0.0.1  # Kết nối MariaDB aaPanel trên localhost
+      - DB_PORT=3306
+      - DB_USER=cadimar_db
+      - DB_PASSWORD=rnkaZT2Bh8bDpzYc
+      - DB_NAME=cadimar_db
+
+  # Frontend Next.js
+  frontend:
+    image: cadimar-landingpage-nextjs-frontend:latest
+    container_name: cadimar-frontend
+    restart: unless-stopped
+    network_mode: "host"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - BACKEND_URL=https://cadimar.net
