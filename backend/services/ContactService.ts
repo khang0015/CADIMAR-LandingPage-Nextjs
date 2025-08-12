@@ -1,6 +1,6 @@
 import { db } from '../database/connection.js';
 import { contacts, type Contact, type NewContact, type CreateContactData } from '../database/schema.js';
-import { eq, desc, and, like, or, sql } from 'drizzle-orm';
+import { eq, desc, and, like, or, sql, type SQL } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 
 export class ContactService {
@@ -14,7 +14,7 @@ export class ContactService {
     limit?: number;
     offset?: number;
   }) {
-    const conditions = [];
+    const conditions: SQL<unknown>[] = [];
     
     if (filters?.status) conditions.push(eq(contacts.status, filters.status));
     if (filters?.priority) conditions.push(eq(contacts.priority, filters.priority));
