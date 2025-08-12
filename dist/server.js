@@ -562,7 +562,6 @@ import express2 from "express";
 
 // backend/services/ContactService.ts
 import { eq as eq2, desc as desc2, and as and2, like as like2, or as or2, sql as sql3 } from "drizzle-orm";
-import { nanoid } from "nanoid";
 var ContactService = class {
   /**
    * Get all contacts with filters
@@ -589,9 +588,7 @@ var ContactService = class {
    * Create new contact
    */
   static async create(data) {
-    const id = nanoid();
     const newContact = {
-      id,
       name: data.name,
       email: data.email,
       phone: data.phone,
@@ -603,8 +600,8 @@ var ContactService = class {
       priority: "normal",
       responded: false
     };
-    await db.insert(contacts).values(newContact);
-    return await this.getById(id);
+    const result = await db.insert(contacts).values(newContact);
+    return result;
   }
   /**
    * Update contact
@@ -859,7 +856,7 @@ import express3 from "express";
 
 // backend/services/TranslationService.ts
 import { eq as eq3, and as and3, like as like3, or as or3, sql as sql4 } from "drizzle-orm";
-import { nanoid as nanoid2 } from "nanoid";
+import { nanoid } from "nanoid";
 var TranslationService = class {
   /**
    * Get all translations
@@ -916,7 +913,7 @@ var TranslationService = class {
       }).where(eq3(translations.id, existing.id));
       return await this.getById(existing.id);
     } else {
-      const id = nanoid2();
+      const id = nanoid();
       const newTranslation = {
         id,
         lang: data.lang,
@@ -1005,7 +1002,7 @@ var LanguageService = class {
    * Create language
    */
   static async create(data) {
-    const id = nanoid2();
+    const id = nanoid();
     const newLanguage = {
       id,
       code: data.code,

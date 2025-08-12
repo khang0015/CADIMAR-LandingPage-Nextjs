@@ -11,6 +11,17 @@ const nextConfig: NextConfig = {
     },
   },
 
+  // Redirects
+  async redirects() {
+    return [
+      {
+        source: '/blog',
+        destination: '/blogs',
+        permanent: true,
+      },
+    ];
+  },
+
   // API rewrites cho backend
   async rewrites() {
     return [
@@ -30,8 +41,12 @@ const nextConfig: NextConfig = {
     BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:3001',
   },
 
-  // Images configuration
+  // Production server configuration
+  output: 'standalone',
+  
+  // Images configuration - disable optimization for static export
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'http',
