@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+
+// Proxy requests to backend API
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 
 export async function GET(
   request: NextRequest,
@@ -8,18 +10,14 @@ export async function GET(
   try {
     const params = await context.params;
     const { id } = params;
-    const contact = await db.getContactById(id);
-    
-    if (!contact) {
-      return NextResponse.json(
-        { error: 'Contact not found' },
-        { status: 404 }
-      );
-    }
+    const backendUrl = `${BACKEND_URL}/api/contacts/${id}`;
 
-    return NextResponse.json(contact);
+    const response = await fetch(backendUrl);
+    const data = await response.json();
+
+    return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('Error fetching contact:', error);
+    console.error('Error proxying to backend:', error);
     return NextResponse.json(
       { error: 'Failed to fetch contact' },
       { status: 500 }
@@ -35,21 +33,46 @@ export async function PATCH(
     const body = await request.json();
     const params = await context.params;
     const { id } = params;
+    const backendUrl = `${BACKEND_URL}/api/contacts/${id}`;
 
-    const contact = await db.updateContactStatus(id, body);
-    
-    if (!contact) {
-      return NextResponse.json(
-        { error: 'Contact not found' },
-        { status: 404 }
-      );
-    }
+    const response = await fetch(backendUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
 
-    return NextResponse.json(contact);
+    const data = await response.json();
+    return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('Error updating contact:', error);
+    console.error('Error proxying to backend:', error);
     return NextResponse.json(
       { error: 'Failed to update contact' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  try {
+    const params = await context.params;
+    const { id } = params;
+    const backendUrl = `${BACKEND_URL}/api/contacts/${id}`;
+
+    const response = await fetch(backendUrl, {
+      method: 'DELETE',
+    });
+
+    const data = await response.json();
+    return NextResponse.json(data, { status: response.status });
+  } catch (error) {
+    console.error('Error proxying to backend:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete contact' },
       { status: 500 }
     );
   }

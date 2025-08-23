@@ -18,7 +18,17 @@ export default function HeroSection() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
     
-    const words = ["smart", "scalable", "creative", "data-driven", "AI-powered", "high-impact"];
+    const words = [
+      "innovative",
+      "visionary",
+      "high-impact",
+      "data-driven",
+      "AI-powered",
+      "performance-focused",
+      "growth-accelerating",
+      "future-ready",
+      "results-oriented"
+    ];
 
     useEffect(() => {
       const interval = setInterval(() => {
@@ -77,7 +87,7 @@ export default function HeroSection() {
   const edgeDots = createRandomDots(25, { minX: 0, maxX: 100, minY: 0, maxY: 100 });
 
   return (
-    <section className="h-screen flex items-center bg-gradient-to-br from-white via-green-50 to-emerald-100 relative overflow-hidden">
+    <section className="min-h-screen pt-20 md:pt-24 lg:pt-0 lg:h-screen flex items-center bg-gradient-to-br from-white via-green-50 to-emerald-100 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 right-20 w-96 h-96 bg-green-500 rounded-full blur-3xl"></div>
@@ -216,11 +226,11 @@ export default function HeroSection() {
               </AnimatedText>
               <AnimatedText delay={0.2}>
                 <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
-                  <span>Driving your</span><br />
+                  <span>Driving your business</span><br />
                   <span>growth</span><br />
-                  <span>with</span><br />
+                  <span>with our</span><br />
                   <MorphingText /><br />
-                  <span> ad strategies</span>
+                  <span>advertising strategies</span>
                 </h1>
               </AnimatedText>
             </div>
@@ -303,8 +313,8 @@ export default function HeroSection() {
           </div>
 
           {/* Right Content - TikTok Phone Mockup */}
-          <motion.div 
-            className="relative flex justify-center items-center h-full max-h-80"
+          <motion.div
+            className="relative justify-center items-center h-full max-h-80 hidden lg:flex"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}

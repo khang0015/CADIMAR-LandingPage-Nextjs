@@ -62,7 +62,7 @@ export default function InsightsSection() {
             viewport={{ once: true }}
             transition={{ delay: 0.1, duration: 0.5 }}
           >
-            {t("insights.title")}
+            Expert perspectives 
           </motion.h2>
           <motion.p 
             className="text-gray-600 text-lg max-w-2xl mx-auto"
@@ -71,7 +71,7 @@ export default function InsightsSection() {
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            Stay updated with the latest trends in digital innovation and business growth.
+            Strategic insights and proven methodologies from our digital marketing experts
           </motion.p>
         </div>
 
@@ -124,7 +124,6 @@ export default function InsightsSection() {
                   <span className="text-green-600 font-medium group-hover:text-green-700 transition-colors">
                     Read More →
                   </span>
-                  <ArrowRight className="text-green-600 group-hover:text-green-700 group-hover:translate-x-1 transition-all duration-300 w-4 h-4" />
                 </div>
               </div>
             </motion.article>

@@ -225,17 +225,31 @@ export default function Header() {
           </div>
 
           {/* Language Switcher & CTA */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {/* Language Switcher */}
             {/* Temporarily hidden
             <div className="hidden sm:flex items-center">
-              <LanguageSelector 
-                variant="compact" 
+              <LanguageSelector
+                variant="compact"
               />
             </div>
             */}
-            
-            <Button 
+
+            {/* Login Button - Hidden on mobile */}
+            <Button
+              variant="outline"
+              onClick={() => {
+                // Add login functionality here
+                console.log("Login clicked");
+              }}
+              className="hidden md:flex bg-white hover:bg-gray-50 text-gray-600 border-[#16a249] hover:border-[#16a249] font-medium"
+              style={{ color: 'rgba(75, 85, 99, var(--tw-text-opacity))' }}
+            >
+              Login
+            </Button>
+
+            {/* Open Account Button */}
+            <Button
               onClick={() => {
               if (window.location.pathname !== '/') {
                 window.location.href = '/#contact';
@@ -245,7 +259,7 @@ export default function Header() {
               }}
               className="bg-brand-green hover:bg-brand-green-dark text-white font-medium"
             >
-              {t("cta.get_in_touch")}
+              Open account
             </Button>
             
             {/* Mobile Menu Button */}
@@ -265,38 +279,66 @@ export default function Header() {
           <div className="md:hidden mt-4 py-4 border-t border-gray-200">
             <div className="flex flex-col space-y-4">
               <Link href="/about">
-                <button 
+                <button
                   className="text-gray-600 hover:text-brand-green transition-colors text-left"
                 >
                   {t("nav.about")}
                 </button>
               </Link>
-              <button 
+              <button
                 onClick={() => scrollToSection("services")}
                 className="text-gray-600 hover:text-brand-green transition-colors text-left"
               >
                 {t("nav.services")}
               </button>
               <Link href="/blogs">
-                <button 
+                <button
                   className="text-gray-600 hover:text-brand-green transition-colors text-left"
                 >
                   Blog
                 </button>
               </Link>
-              <button 
+              <button
                 onClick={() => scrollToSection("testimonials")}
                 className="text-gray-600 hover:text-brand-green transition-colors text-left"
               >
                 {t("nav.testimonials")}
               </button>
-              <button 
+              <button
                 onClick={() => scrollToSection("contact")}
                 className="text-gray-600 hover:text-brand-green transition-colors text-left"
               >
                 {t("nav.contact")}
               </button>
-              
+
+              {/* Mobile CTA Buttons */}
+              <div className="flex flex-col space-y-3 pt-4 border-t border-gray-200">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    console.log("Login clicked");
+                    setMobileMenuOpen(false);
+                  }}
+                  className="bg-white hover:bg-gray-50 text-gray-600 border-[#16a249] hover:border-[#16a249] font-medium w-full"
+                  style={{ color: 'rgba(75, 85, 99, var(--tw-text-opacity))' }}
+                >
+                  Login
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (window.location.pathname !== '/') {
+                      window.location.href = '/#contact';
+                    } else {
+                      scrollToSection("contact");
+                    }
+                    setMobileMenuOpen(false);
+                  }}
+                  className="bg-brand-green hover:bg-brand-green-dark text-white font-medium w-full"
+                >
+                  Open account
+                </Button>
+              </div>
+
               {/* Mobile Language Switcher - Temporarily hidden
               <div className="flex items-center justify-center pt-4 border-t border-gray-200">
                 <LanguageSelector />
