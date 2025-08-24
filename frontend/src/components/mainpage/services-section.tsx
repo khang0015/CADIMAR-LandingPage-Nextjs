@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "@/hooks/use-translations";
 import { AnimatedText } from "./animated-text";
+import Link from "next/link";
 
 export default function ServicesSection() {
   const { t } = useTranslations();
@@ -18,23 +19,8 @@ export default function ServicesSection() {
       cta: t("platforms.tiktok.cta"),
       icon: SiTiktok,
       bgGradient: "from-gray-900 to-black",
-      hoverColor: "hover:bg-white hover:text-black"
-    },
-    {
-      name: t("platforms.google.name"),
-      description: t("platforms.google.description"),
-      cta: t("platforms.google.cta"),
-      icon: SiGoogle,
-      bgGradient: "from-green-700 to-green-900",
-      hoverColor: "hover:bg-white hover:text-green-700"
-    },
-    {
-      name: t("platforms.microsoft.name"),
-      description: t("platforms.microsoft.description"),
-      cta: t("platforms.microsoft.cta"),
-      icon: Building2,
-      bgGradient: "from-emerald-700 to-emerald-900",
-      hoverColor: "hover:bg-white hover:text-emerald-700"
+      hoverColor: "hover:bg-white hover:text-black",
+      serviceId: "tiktok"
     },
     {
       name: t("platforms.facebook.name"),
@@ -42,7 +28,26 @@ export default function ServicesSection() {
       cta: t("platforms.facebook.cta"),
       icon: SiFacebook,
       bgGradient: "from-teal-700 to-teal-900",
-      hoverColor: "hover:bg-white hover:text-teal-700"
+      hoverColor: "hover:bg-white hover:text-teal-700",
+      serviceId: "facebook"
+    },
+    {
+      name: t("platforms.google.name"),
+      description: t("platforms.google.description"),
+      cta: t("platforms.google.cta"),
+      icon: SiGoogle,
+      bgGradient: "from-green-700 to-green-900",
+      hoverColor: "hover:bg-white hover:text-green-700",
+      serviceId: "google"
+    },
+    {
+      name: t("platforms.microsoft.name"),
+      description: t("platforms.microsoft.description"),
+      cta: t("platforms.microsoft.cta"),
+      icon: Building2,
+      bgGradient: "from-emerald-700 to-emerald-900",
+      hoverColor: "hover:bg-white hover:text-emerald-700",
+      serviceId: "microsoft"
     }
   ];
 
@@ -99,13 +104,15 @@ export default function ServicesSection() {
                 <p className="text-gray-200 mb-6 leading-relaxed">
                   {platform.description}
                 </p>
-                <Button 
-                  variant="outline"
-                  className={`inline-flex items-center space-x-2 border-white/40 rounded-full px-6 py-3 ${platform.hoverColor} transition-colors group backdrop-blur-sm hover:border-green-300/60`}
-                >
-                  <span>{platform.cta}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <Link href={`/services#${platform.serviceId}`}>
+                  <Button
+                    variant="outline"
+                    className={`inline-flex items-center space-x-2 border-white/40 rounded-full px-6 py-3 ${platform.hoverColor} transition-colors group backdrop-blur-sm hover:border-green-300/60`}
+                  >
+                    <span>{platform.cta}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
               </motion.div>
             );
           })}

@@ -1,0 +1,55 @@
+/* Fix for Select dropdown causing layout shift and scrollbar issues */
+
+/* Force body to maintain scrollbar space */
+body {
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable;
+}
+
+/* Prevent Radix from changing body overflow */
+body[data-scroll-locked] {
+  overflow-y: scroll !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Ensure select content is properly positioned */
+[data-radix-select-content] {
+  position: fixed !important;
+  z-index: 50 !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+}
+
+/* Prevent any layout shifts */
+[data-radix-select-trigger] {
+  position: relative;
+  z-index: 1;
+}
+
+/* Override Radix Portal styles that cause issues */
+[data-radix-portal] {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 50 !important;
+  pointer-events: none !important;
+}
+
+[data-radix-portal] > * {
+  pointer-events: auto !important;
+}
+
+/* Prevent header from shifting */
+header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 50 !important;
+}
+
+/* Ensure main content has proper top margin */
+main {
+  margin-top: 80px !important;
+}

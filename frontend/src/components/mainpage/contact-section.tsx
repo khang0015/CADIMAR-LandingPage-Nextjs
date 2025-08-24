@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CustomSelect } from "@/components/ui/custom-select";
 import { useTranslations } from "@/hooks/use-translations";
 import { Send, Loader2, Check } from "lucide-react";
 
@@ -179,19 +179,20 @@ export default function ContactSection() {
                 <span className="w-1 h-4 bg-green-600 mr-2 rounded-full"></span>
                 {t("form.service_label")}
               </label>
-              <Select onValueChange={(value) => handleInputChange("service", value)} value={formData.service}>
-                <SelectTrigger className="border-gray-300 focus:ring-green-600 focus:border-green-600 transition-all">
-                  <SelectValue placeholder={t("form.service_placeholder")} />
-                </SelectTrigger>
-                <SelectContent className="border-green-600/20 bg-white shadow-lg z-[100]" position="popper" sideOffset={5}>
-                  <SelectItem value="tiktok-ads" className="hover:bg-green-100 focus:bg-green-200">{t("form.tiktok_ads")}</SelectItem>
-                  <SelectItem value="google-ads" className="hover:bg-green-100 focus:bg-green-200">{t("form.google_ads")}</SelectItem>
-                  <SelectItem value="microsoft-ads" className="hover:bg-green-100 focus:bg-green-200">{t("form.microsoft_ads")}</SelectItem>
-                  <SelectItem value="facebook-ads" className="hover:bg-green-100 focus:bg-green-200">{t("form.facebook_ads")}</SelectItem>
-                  <SelectItem value="consultation" className="hover:bg-green-100 focus:bg-green-200">{t("form.consultation")}</SelectItem>
-                  <SelectItem value="other" className="hover:bg-green-100 focus:bg-green-200">Other Services</SelectItem>
-                </SelectContent>
-              </Select>
+              <CustomSelect
+                value={formData.service}
+                onValueChange={(value) => handleInputChange("service", value)}
+                placeholder={t("form.service_placeholder")}
+                options={[
+                  { value: "tiktok-ads", label: t("form.tiktok_ads") },
+                  { value: "google-ads", label: t("form.google_ads") },
+                  { value: "microsoft-ads", label: t("form.microsoft_ads") },
+                  { value: "facebook-ads", label: t("form.facebook_ads") },
+                  { value: "consultation", label: t("form.consultation") },
+                  { value: "other", label: "Other Services" }
+                ]}
+                className="w-full"
+              />
             </div>
             
             <div className="mb-4">
