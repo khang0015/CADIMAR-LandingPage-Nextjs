@@ -106,16 +106,22 @@ export default function BlogSection() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
-              <div className="h-48 relative overflow-hidden">
-                <Image 
-                  src={post.featured_image} 
-                  alt={post.title}
-                  fill
-                  className="object-cover transition-transform duration-500 hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-              </div>
+              <Link
+                href={`/blogs/${post.slug}`}
+                aria-label={`View featured image and read article: ${post.title}`}
+                title={`Read ${post.title}`}
+              >
+                <div className="h-48 relative overflow-hidden cursor-pointer">
+                  <Image
+                    src={post.featured_image}
+                    alt={`Featured image for article: ${post.title} - ${post.excerpt.substring(0, 80)}...`}
+                    fill
+                    className="object-cover transition-transform duration-500 hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                </div>
+              </Link>
               <div className="p-6">
                 <div className="flex items-center space-x-4 text-sm text-gray-400 mb-3">
                   <span className="bg-green-600/20 text-green-300 px-3 py-1 rounded-full text-xs font-medium border border-green-500/30">
@@ -131,15 +137,26 @@ export default function BlogSection() {
                   </div>
                 </div>
                 
-                <h3 className="text-xl font-bold text-white mb-3">
-                  {post.title}
-                </h3>
+                <Link
+                  href={`/blogs/${post.slug}`}
+                  aria-label={`Read article: ${post.title}`}
+                  title={post.title}
+                >
+                  <h3 className="text-xl font-bold text-white mb-3 hover:text-green-300 transition-colors cursor-pointer">
+                    {post.title}
+                  </h3>
+                </Link>
                 
                 <p className="text-gray-300 mb-4 leading-relaxed">
                   {post.excerpt}
                 </p>
                 
-                <Link href={`/blogs/${post.slug}`} className="inline-flex items-center text-green-400 hover:text-green-300 font-medium" aria-label="Read more about AI in Modern Business | The Future of Digital Innovation | Digital Transformation Strategies">
+                <Link
+                  href={`/blogs/${post.slug}`}
+                  className="inline-flex items-center text-green-400 hover:text-green-300 font-medium"
+                  aria-label={`Read full article: ${post.title} - ${post.excerpt.substring(0, 100)}...`}
+                  title={`Read more about ${post.title}`}
+                >
                   Read More
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
@@ -155,9 +172,11 @@ export default function BlogSection() {
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.5 }}
         >
-          <Link 
+          <Link
             href="/blogs"
             className="inline-flex items-center px-8 py-3 bg-green-600 text-white font-medium rounded-full hover:bg-green-700 transition-colors shadow-lg hover:shadow-xl"
+            aria-label="View all blog articles and insights about digital innovation, business growth, and technology trends"
+            title="Explore all our blog posts and expert insights"
           >
             View All Posts
             <ArrowRight className="w-5 h-5 ml-2" />

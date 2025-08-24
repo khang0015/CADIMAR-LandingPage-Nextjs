@@ -247,7 +247,7 @@ export default function AdminUploadsPage() {
             <p className="text-gray-600">Upload và quản lý ảnh</p>
           </div>
           <div className="flex gap-2">
-            <Button
+            {/* <Button
               variant="outline"
               onClick={() => refetch()}
               disabled={isLoading}
@@ -271,7 +271,7 @@ export default function AdminUploadsPage() {
               }}
             >
               Test API
-            </Button>
+            </Button> */}
             <Button onClick={() => setIsUploadOpen(true)}>
               <Upload className="h-4 w-4 mr-2" />
               Upload File

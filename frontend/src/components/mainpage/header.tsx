@@ -111,7 +111,11 @@ export default function Header() {
 
           {/* Enhanced Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            <Link href="/about">
+            <Link
+              href="/about"
+              aria-label="Learn about CADIMAR team, company story, and our journey to becoming a leading digital advertising agency"
+              title="About CADIMAR - Our Story & Team"
+            >
               <motion.button 
                 className="px-4 py-2 rounded-full text-gray-600 hover:text-brand-green hover:bg-green-50 transition-all duration-200 relative overflow-hidden"
                 whileHover={{ scale: 1.05 }}
@@ -130,30 +134,29 @@ export default function Header() {
                 />
               </motion.button>
             </Link>
-            <motion.button 
-              onClick={() => {
-              if (window.location.pathname !== '/') {
-                window.location.href = '/#services';
-              } else {
-                scrollToSection("services");
-              }
-              }} 
-              className="px-4 py-2 rounded-full text-gray-600 hover:text-brand-green hover:bg-green-50 transition-all duration-200 relative overflow-hidden"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <Link
+              href="/services"
+              aria-label="Explore our comprehensive digital advertising services including TikTok, Facebook, Google and Microsoft ads"
+              title="Digital Advertising Services - TikTok, Facebook, Google & Microsoft Ads"
             >
-              <motion.span
-              className="relative z-10"
-              whileHover={{ y: -1 }}
+              <motion.button
+                className="px-4 py-2 rounded-full text-gray-600 hover:text-brand-green hover:bg-green-50 transition-all duration-200 relative overflow-hidden"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-              {t("nav.services")}
-              </motion.span>
-              <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-brand-green/10 to-green-200/20 opacity-0"
-              whileHover={{ opacity: 1 }}
-              transition={{ duration: 0.2 }}
-              />
-            </motion.button>
+                <motion.span
+                className="relative z-10"
+                whileHover={{ y: -1 }}
+                >
+                {t("nav.services")}
+                </motion.span>
+                <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-brand-green/10 to-green-200/20 opacity-0"
+                whileHover={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
+                />
+              </motion.button>
+            </Link>
             <Link href="/blogs">
               <motion.button 
                 className="px-4 py-2 rounded-full text-gray-600 hover:text-brand-green hover:bg-green-50 transition-all duration-200 relative overflow-hidden"
@@ -239,10 +242,9 @@ export default function Header() {
             <Button
               variant="outline"
               onClick={() => {
-                // Add login functionality here
-                console.log("Login clicked");
+                window.open('https://app.cadimar.net/sign-in', '_blank');
               }}
-              className="hidden md:flex bg-white hover:bg-gray-50 text-gray-600 border-[#16a249] hover:border-[#16a249] font-medium"
+              className="hidden md:flex bg-white hover:bg-gray-100 text-gray-600 hover:text-gray-800 border-[#16a249] hover:border-[#0d7a32] font-medium transition-all duration-200"
               style={{ color: 'rgba(75, 85, 99, var(--tw-text-opacity))' }}
             >
               Login
@@ -251,11 +253,7 @@ export default function Header() {
             {/* Open Account Button */}
             <Button
               onClick={() => {
-              if (window.location.pathname !== '/') {
-                window.location.href = '/#contact';
-              } else {
-                scrollToSection("contact");
-              }
+                window.open('https://app.cadimar.net/sign-up', '_blank');
               }}
               className="bg-brand-green hover:bg-brand-green-dark text-white font-medium"
             >
@@ -278,19 +276,28 @@ export default function Header() {
         {mobileMenuOpen && (
           <div className="md:hidden mt-4 py-4 border-t border-gray-200">
             <div className="flex flex-col space-y-4">
-              <Link href="/about">
+              <Link
+                href="/about"
+                aria-label="Learn about CADIMAR team, company story, and our journey to becoming a leading digital advertising agency"
+                title="About CADIMAR - Our Story & Team"
+              >
                 <button
                   className="text-gray-600 hover:text-brand-green transition-colors text-left"
                 >
                   {t("nav.about")}
                 </button>
               </Link>
-              <button
-                onClick={() => scrollToSection("services")}
-                className="text-gray-600 hover:text-brand-green transition-colors text-left"
+              <Link
+                href="/services"
+                aria-label="Explore our comprehensive digital advertising services including TikTok, Facebook, Google and Microsoft ads"
+                title="Digital Advertising Services - TikTok, Facebook, Google & Microsoft Ads"
               >
-                {t("nav.services")}
-              </button>
+                <button
+                  className="text-gray-600 hover:text-brand-green transition-colors text-left"
+                >
+                  {t("nav.services")}
+                </button>
+              </Link>
               <Link href="/blogs">
                 <button
                   className="text-gray-600 hover:text-brand-green transition-colors text-left"
@@ -316,21 +323,17 @@ export default function Header() {
                 <Button
                   variant="outline"
                   onClick={() => {
-                    console.log("Login clicked");
+                    window.open('https://app.cadimar.net/sign-in', '_blank');
                     setMobileMenuOpen(false);
                   }}
-                  className="bg-white hover:bg-gray-50 text-gray-600 border-[#16a249] hover:border-[#16a249] font-medium w-full"
+                  className="bg-white hover:bg-gray-100 text-gray-600 hover:text-gray-80 border-[#16a249] hover:border-[#0d7a32] font-medium w-full transition-all duration-200"
                   style={{ color: 'rgba(75, 85, 99, var(--tw-text-opacity))' }}
                 >
                   Login
                 </Button>
                 <Button
                   onClick={() => {
-                    if (window.location.pathname !== '/') {
-                      window.location.href = '/#contact';
-                    } else {
-                      scrollToSection("contact");
-                    }
+                    window.open('https://app.cadimar.net/sign-up', '_blank');
                     setMobileMenuOpen(false);
                   }}
                   className="bg-brand-green hover:bg-brand-green-dark text-white font-medium w-full"

@@ -11,26 +11,66 @@ const __dirname = path.dirname(__filename);
 // Load environment variables
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env.local') });
 
-// Create MySQL connection
-const connection = await mysql.createConnection({
+// Database configuration
+const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT || '3306'),
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'cadimar_db',
   charset: 'utf8mb4',
+  // Connection pool settings
+  connectionLimit: 10,
+  acquireTimeout: 60000,
+  timeout: 60000,
+  reconnect: true,
+  // Keep connection alive
+  keepAliveInitialDelay: 0,
+  enableKeepAlive: true,
+};
+
+console.log('🔧 Database config:', {
+  host: dbConfig.host,
+  port: dbConfig.port,
+  user: dbConfig.user,
+  database: dbConfig.database,
 });
 
-// Create Drizzle instance
-export const db = drizzle(connection);
+// Create MySQL connection pool
+const pool = mysql.createPool(dbConfig);
 
-// Export connection for manual queries if needed
-export { connection };
+// Create Drizzle instance with pool
+export const db = drizzle(pool);
+
+// Export pool for manual queries if needed
+export { pool as connection };
 
 // Test connection
-try {
-  await connection.ping();
-  console.log('✅ Database connected successfully');
-} catch (error) {
-  console.error('❌ Database connection failed:', error);
+async function testConnection() {
+  try {
+    const connection = await pool.getConnection();
+    await connection.ping();
+    connection.release();
+    console.log('✅ Database connected successfully');
+  } catch (error) {
+    console.error('❌ Database connection failed:', error);
+    // Retry connection after 5 seconds
+    setTimeout(testConnection, 5000);
+  }
 }
+
+// Initial connection test
+testConnection();
+
+// Handle pool events
+pool.on('connection', (connection) => {
+  console.log('📡 New database connection established as id ' + connection.threadId);
+});
+
+pool.on('error', (err) => {
+  console.error('❌ Database pool error:', err);
+  if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+    console.log('🔄 Attempting to reconnect to database...');
+    testConnection();
+  }
+});

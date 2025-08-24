@@ -5,30 +5,34 @@ import { Button } from "@/components/ui/button";
 import { useTranslations } from "@/hooks/use-translations";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function InsightsSection() {
   const { t } = useTranslations();
 
   const articles = [
     {
-      title: "The Future of Digital Innovation",
-      description: "Discover how emerging technologies are reshaping the business landscape and creating new opportunities for growth.",
-      date: "Dec 15, 2024",
-      readTime: "5 min read",
-      category: "Innovation"
+      title: "The Future of Consumer Trust",
+      description: "Explore how brands can build lasting consumer trust by balancing personalization with privacy and embracing authenticity.",
+      date: "Aug 24, 2025",
+      readTime: "4 min read",
+      slug: "future-of-consumer-trust",
+      category: "Trust"
     },
     {
-      title: "Digital Transformation Strategies",
-      description: "Learn the key strategies successful companies use to navigate their digital transformation journey.",
-      date: "Dec 10, 2024",
-      readTime: "7 min read",
+      title: "From Clicks to Communities",
+      description: "Discover why the most successful brands are shifting from clicks and conversions to building authentic, thriving communities.",
+      date: "Jul 14, 2025",
+      readTime: "5 min read",
+      slug: "from-clicks-to-communities",
       category: "Strategy"
     },
     {
-      title: "AI in Modern Business",
-      description: "Explore how artificial intelligence is revolutionizing business operations and customer experiences.",
-      date: "Dec 5, 2024",
-      readTime: "6 min read",
+      title: "AI-Driven Creativity in Marketing",
+      description: "Learn how AI is transforming digital marketing by accelerating creativity, personalization, and campaign effectiveness.",
+      date: "May 20, 2025",
+      readTime: "5 min read",
+      slug: "ai-driven-creativity-marketing", 
       category: "Technology"
     }
   ];
@@ -77,20 +81,25 @@ export default function InsightsSection() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {articles.map((article, index) => (
-            <motion.article 
-              key={index} 
-              className="bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden hover:scale-105 hover:-translate-y-2 transition-all duration-500 group cursor-pointer shadow-lg hover:shadow-2xl border border-white/60 hover:border-green-200/80"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 + index * 0.1, duration: 0.6 }}
-              whileHover={{ scale: 1.02, y: -5 }}
+            <Link
+              key={`insight-${article.slug}-${index}`}
+              href={`/blogs/${article.slug}`}
+              aria-label={`Read insight article: ${article.title} - ${article.description}`}
+              title={`Read more about ${article.title}`}
             >
+              <motion.article
+                className="bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden hover:scale-105 hover:-translate-y-2 transition-all duration-500 group cursor-pointer shadow-lg hover:shadow-2xl border border-white/60 hover:border-green-200/80"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 + index * 0.1, duration: 0.6 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+              >
               {/* Image Header */}
               <div className="h-48 relative overflow-hidden">
-                <Image 
-                  src="/media.png" 
-                  alt={article.title}
+                <Image
+                  src={`/blogs/${article.slug}.jpg`}
+                  alt={`Featured image for insight article: ${article.title} - ${article.description.substring(0, 80)}...`}
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -127,6 +136,7 @@ export default function InsightsSection() {
                 </div>
               </div>
             </motion.article>
+            </Link>
           ))}
         </div>
         
@@ -138,13 +148,17 @@ export default function InsightsSection() {
           viewport={{ once: true }}
           transition={{ delay: 0.6, duration: 0.5 }}
         >
-          <Button 
-            variant="outline"
-            className="inline-flex items-center space-x-2 border-green-600 text-green-600 rounded-full px-8 py-3 hover:bg-green-600 hover:text-white hover:border-green-600 transition-colors group"
-          >
-            <span>{t("insights.read_all")}</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          <Link href="/blogs">
+            <Button
+              variant="outline"
+              className="inline-flex items-center space-x-2 border-green-600 text-green-600 rounded-full px-8 py-3 hover:bg-green-600 hover:text-white hover:border-green-600 transition-colors group"
+              aria-label="View all insight articles and expert perspectives on digital marketing, AI, consumer trust, and community building"
+              title="Explore all our expert insights and strategic perspectives"
+            >
+              <span>{t("insights.read_all")}</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>
