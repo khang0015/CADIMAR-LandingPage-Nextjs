@@ -63,7 +63,7 @@ export const translations = {
     "form.name_label": "Full Name *",
     "form.name_placeholder": "Your full name",
     "form.email_label": "Email Address *",
-    "form.email_placeholder": "your.email@company.com",
+    "form.email_placeholder": "example@gmail.com",
     "form.company_label": "Company",
     "form.company_placeholder": "Your company name",
     "form.service_label": "Interested Service",

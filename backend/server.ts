@@ -53,8 +53,10 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve static files (uploads) - now from root level
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// Serve static files (uploads) - from external volume or local path
+const uploadsPath = process.env.UPLOADS_PATH || path.join(__dirname, '../uploads');
+console.log('📁 Uploads path:', uploadsPath);
+app.use('/uploads', express.static(uploadsPath));
 
 // Health check
 app.get('/health', (req, res) => {

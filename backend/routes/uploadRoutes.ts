@@ -9,6 +9,9 @@ const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
+// Get uploads base path from environment or default
+const UPLOADS_BASE_PATH = process.env.UPLOADS_PATH || path.join(process.cwd(), 'uploads');
+
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req: any, file: any, cb: any) => {
@@ -17,13 +20,13 @@ const storage = multer.diskStorage({
     console.log('Upload request - type:', req.body.type, 'customPath:', req.body.customPath);
 
     if (req.body.customPath) {
-      uploadDir = path.join(process.cwd(), 'uploads', req.body.customPath);
+      uploadDir = path.join(UPLOADS_BASE_PATH, req.body.customPath);
     } else {
       // Handle avatar type correctly
       if (req.body.type === 'avatar') {
-        uploadDir = path.join(process.cwd(), 'uploads', 'avatars');
+        uploadDir = path.join(UPLOADS_BASE_PATH, 'avatars');
       } else {
-        uploadDir = path.join(process.cwd(), 'uploads', 'blog');
+        uploadDir = path.join(UPLOADS_BASE_PATH, 'blog');
       }
     }
 
@@ -76,12 +79,12 @@ router.post('/', (req: any, res: Response) => {
 
         let uploadDir;
         if (customPath) {
-          uploadDir = path.join(process.cwd(), 'uploads', customPath);
+          uploadDir = path.join(UPLOADS_BASE_PATH, customPath);
         } else {
           if (type === 'avatar') {
-            uploadDir = path.join(process.cwd(), 'uploads', 'avatars');
+            uploadDir = path.join(UPLOADS_BASE_PATH, 'avatars');
           } else {
-            uploadDir = path.join(process.cwd(), 'uploads', 'blog');
+            uploadDir = path.join(UPLOADS_BASE_PATH, 'blog');
           }
         }
 
@@ -187,7 +190,7 @@ router.get('/files', (req: any, res: any) => {
       folderName = 'avatars';
     }
 
-    const uploadDir = path.join(process.cwd(), 'uploads', folderName);
+    const uploadDir = path.join(UPLOADS_BASE_PATH, folderName);
 
     console.log(`=== API called with type: ${type} ===`);
     console.log(`Folder name: ${folderName}`);
@@ -258,8 +261,8 @@ router.put('/files/:filename/rename', async (req: any, res: any) => {
     }
 
     const uploadDir = type === 'avatar'
-      ? path.join(process.cwd(), 'uploads/avatars')
-      : path.join(process.cwd(), 'uploads/blog');
+      ? path.join(UPLOADS_BASE_PATH, 'avatars')
+      : path.join(UPLOADS_BASE_PATH, 'blog');
 
     const oldPath = path.join(uploadDir, filename);
     const newPath = path.join(uploadDir, newFilename);
@@ -309,8 +312,8 @@ router.delete('/files/:filename', async (req: any, res: any) => {
     const { type } = req.body;
 
     const uploadDir = type === 'avatar'
-      ? path.join(process.cwd(), 'uploads/avatars')
-      : path.join(process.cwd(), 'uploads/blog');
+      ? path.join(UPLOADS_BASE_PATH, 'avatars')
+      : path.join(UPLOADS_BASE_PATH, 'blog');
 
     const filePath = path.join(uploadDir, filename);
 

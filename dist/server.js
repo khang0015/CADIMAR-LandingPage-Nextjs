@@ -1,3 +1,11 @@
+var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+}) : x)(function(x) {
+  if (typeof require !== "undefined")
+    return require.apply(this, arguments);
+  throw Error('Dynamic require of "' + x + '" is not supported');
+});
+
 // backend/server.ts
 import express6 from "express";
 import cors from "cors";
@@ -20,21 +28,52 @@ import { fileURLToPath } from "url";
 var __filename = fileURLToPath(import.meta.url);
 var __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, "..", "..", ".env.local") });
-var connection = await mysql.createConnection({
+var dbConfig = {
   host: process.env.DB_HOST || "localhost",
   port: parseInt(process.env.DB_PORT || "3306"),
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "",
   database: process.env.DB_NAME || "cadimar_db",
-  charset: "utf8mb4"
+  charset: "utf8mb4",
+  // Connection pool settings
+  connectionLimit: 10,
+  acquireTimeout: 6e4,
+  timeout: 6e4,
+  reconnect: true,
+  // Keep connection alive
+  keepAliveInitialDelay: 0,
+  enableKeepAlive: true
+};
+console.log("\u{1F527} Database config:", {
+  host: dbConfig.host,
+  port: dbConfig.port,
+  user: dbConfig.user,
+  database: dbConfig.database
 });
-var db = drizzle(connection);
-try {
-  await connection.ping();
-  console.log("\u2705 Database connected successfully");
-} catch (error) {
-  console.error("\u274C Database connection failed:", error);
+var pool = mysql.createPool(dbConfig);
+var db = drizzle(pool);
+async function testConnection() {
+  try {
+    const connection = await pool.getConnection();
+    await connection.ping();
+    connection.release();
+    console.log("\u2705 Database connected successfully");
+  } catch (error) {
+    console.error("\u274C Database connection failed:", error);
+    setTimeout(testConnection, 5e3);
+  }
 }
+testConnection();
+pool.on("connection", (connection) => {
+  console.log("\u{1F4E1} New database connection established as id " + connection.threadId);
+});
+pool.on("error", (err) => {
+  console.error("\u274C Database pool error:", err);
+  if (err.code === "PROTOCOL_CONNECTION_LOST") {
+    console.log("\u{1F504} Attempting to reconnect to database...");
+    testConnection();
+  }
+});
 
 // backend/database/schema.ts
 import {
@@ -1366,13 +1405,30 @@ var languageRoutes_default = router4;
 import express5 from "express";
 import multer from "multer";
 import path2 from "path";
+import fs from "fs";
 import { fileURLToPath as fileURLToPath2 } from "url";
 var __filename2 = fileURLToPath2(import.meta.url);
 var __dirname2 = path2.dirname(__filename2);
 var router5 = express5.Router();
+var UPLOADS_BASE_PATH = process.env.UPLOADS_PATH || path2.join(process.cwd(), "uploads");
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = req.body.type === "avatar" ? path2.join(__dirname2, "../uploads/avatars") : path2.join(__dirname2, "../uploads/blog");
+    let uploadDir;
+    console.log("Upload request - type:", req.body.type, "customPath:", req.body.customPath);
+    if (req.body.customPath) {
+      uploadDir = path2.join(UPLOADS_BASE_PATH, req.body.customPath);
+    } else {
+      if (req.body.type === "avatar") {
+        uploadDir = path2.join(UPLOADS_BASE_PATH, "avatars");
+      } else {
+        uploadDir = path2.join(UPLOADS_BASE_PATH, "blog");
+      }
+    }
+    console.log("Upload destination:", uploadDir);
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+      console.log("Created directory:", uploadDir);
+    }
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
@@ -1399,33 +1455,303 @@ var upload = multer({
     }
   }
 });
-router5.post("/", upload.single("image"), (req, res) => {
-  try {
-    if (!req.file) {
+router5.post("/", (req, res) => {
+  const dynamicUpload = multer({
+    storage: multer.diskStorage({
+      destination: (req2, file, cb) => {
+        const type = req2.body.type || "blog";
+        const customPath = req2.body.customPath;
+        console.log("Dynamic upload - type:", type, "customPath:", customPath);
+        let uploadDir;
+        if (customPath) {
+          uploadDir = path2.join(UPLOADS_BASE_PATH, customPath);
+        } else {
+          if (type === "avatar") {
+            uploadDir = path2.join(UPLOADS_BASE_PATH, "avatars");
+          } else {
+            uploadDir = path2.join(UPLOADS_BASE_PATH, "blog");
+          }
+        }
+        console.log("Dynamic upload destination:", uploadDir);
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+      },
+      filename: (req2, file, cb) => {
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        const ext = path2.extname(file.originalname);
+        const filename = file.fieldname + "-" + uniqueSuffix + ext;
+        cb(null, filename);
+      }
+    }),
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req2, file, cb) => {
+      const allowedTypes = /jpeg|jpg|png|gif|webp/;
+      const extname = allowedTypes.test(path2.extname(file.originalname).toLowerCase());
+      const mimetype = allowedTypes.test(file.mimetype);
+      if (mimetype && extname) {
+        return cb(null, true);
+      } else {
+        cb(new Error("Only image files are allowed"));
+      }
+    }
+  }).single("image");
+  dynamicUpload(req, res, (err) => {
+    if (err) {
+      console.error("Multer error:", err);
       return res.status(400).json({
         success: false,
-        error: "No file uploaded"
+        error: err.message
       });
     }
-    const type = req.body.type || "blog";
-    const relativePath = type === "avatar" ? `uploads/avatars/${req.file.filename}` : `uploads/blog/${req.file.filename}`;
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          error: "No file uploaded"
+        });
+      }
+      console.log("=== UPLOAD DEBUG ===");
+      console.log("req.body:", req.body);
+      console.log("req.body.type:", req.body.type);
+      console.log("req.body.customPath:", req.body.customPath);
+      console.log("typeof req.body.type:", typeof req.body.type);
+      const type = req.body.type || "blog";
+      const customPath = req.body.customPath;
+      console.log("Final type after default:", type);
+      let relativePath;
+      if (customPath) {
+        relativePath = `uploads/${customPath}/${req.file.filename}`;
+      } else {
+        if (type === "avatar") {
+          relativePath = `uploads/avatars/${req.file.filename}`;
+        } else {
+          relativePath = `uploads/blog/${req.file.filename}`;
+        }
+      }
+      console.log("Upload completed - type:", type, "path:", relativePath);
+      res.json({
+        success: true,
+        data: {
+          filename: req.file.filename,
+          originalName: req.file.originalname,
+          path: relativePath,
+          size: req.file.size,
+          mimetype: req.file.mimetype
+        }
+      });
+    } catch (error) {
+      console.error("Upload error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to upload file"
+      });
+    }
+  });
+});
+router5.get("/files", (req, res) => {
+  try {
+    const { type = "blog" } = req.query;
+    let folderName = type;
+    if (type === "avatar") {
+      folderName = "avatars";
+    }
+    const uploadDir = path2.join(UPLOADS_BASE_PATH, folderName);
+    console.log(`=== API called with type: ${type} ===`);
+    console.log(`Folder name: ${folderName}`);
+    console.log(`Looking for files in: ${uploadDir}`);
+    console.log(`Directory exists: ${fs.existsSync(uploadDir)}`);
+    if (!fs.existsSync(uploadDir)) {
+      console.log("Directory not found, returning empty array");
+      return res.json({ success: true, data: [] });
+    }
+    const allFiles = fs.readdirSync(uploadDir);
+    console.log(`All files in directory: ${allFiles}`);
+    const imageFiles = allFiles.filter((file) => {
+      const ext = path2.extname(file).toLowerCase();
+      const isImage = [".jpg", ".jpeg", ".png", ".gif", ".webp"].includes(ext);
+      console.log(`File: ${file}, Extension: ${ext}, Is Image: ${isImage}`);
+      return isImage;
+    });
+    console.log(`Image files: ${imageFiles}`);
+    const files = imageFiles.map((file) => {
+      const stats = fs.statSync(path2.join(uploadDir, file));
+      const fileData = {
+        filename: file,
+        originalName: file,
+        path: `uploads/${folderName}/${file}`,
+        size: stats.size,
+        mimetype: getMimeType(file),
+        createdAt: stats.birthtime,
+        modifiedAt: stats.mtime,
+        type
+        // Keep original type (avatar or blog)
+      };
+      console.log(`Processed file:`, fileData);
+      return fileData;
+    });
+    console.log(`=== Final result: ${files.length} files ===`);
+    console.log("Files:", files);
     res.json({
       success: true,
+      data: files,
+      total: files.length
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to list files"
+    });
+  }
+});
+router5.put("/files/:filename/rename", async (req, res) => {
+  try {
+    const { filename } = req.params;
+    const { newFilename, type } = req.body;
+    if (!newFilename) {
+      return res.status(400).json({
+        success: false,
+        error: "New filename is required"
+      });
+    }
+    const uploadDir = type === "avatar" ? path2.join(UPLOADS_BASE_PATH, "avatars") : path2.join(UPLOADS_BASE_PATH, "blog");
+    const oldPath = path2.join(uploadDir, filename);
+    const newPath = path2.join(uploadDir, newFilename);
+    const fs2 = __require("fs");
+    if (!fs2.existsSync(oldPath)) {
+      return res.status(404).json({
+        success: false,
+        error: "File not found"
+      });
+    }
+    if (fs2.existsSync(newPath)) {
+      return res.status(409).json({
+        success: false,
+        error: "A file with that name already exists"
+      });
+    }
+    fs2.renameSync(oldPath, newPath);
+    res.json({
+      success: true,
+      message: "File renamed successfully",
       data: {
-        filename: req.file.filename,
-        originalName: req.file.originalname,
-        path: relativePath,
-        size: req.file.size,
-        mimetype: req.file.mimetype
+        oldFilename: filename,
+        newFilename,
+        path: `uploads/${type}/${newFilename}`
       }
     });
   } catch (error) {
-    console.error("Upload error:", error);
+    console.error("Error renaming file:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to upload file"
+      error: "Failed to rename file"
     });
   }
+});
+router5.delete("/files/:filename", async (req, res) => {
+  try {
+    const { filename } = req.params;
+    const { type } = req.body;
+    const uploadDir = type === "avatar" ? path2.join(UPLOADS_BASE_PATH, "avatars") : path2.join(UPLOADS_BASE_PATH, "blog");
+    const filePath = path2.join(uploadDir, filename);
+    const fs2 = __require("fs");
+    if (!fs2.existsSync(filePath)) {
+      return res.status(404).json({
+        success: false,
+        error: "File not found"
+      });
+    }
+    fs2.unlinkSync(filePath);
+    res.json({
+      success: true,
+      message: "File deleted successfully"
+    });
+  } catch (error) {
+    console.error("Error deleting file:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to delete file"
+    });
+  }
+});
+function getMimeType(filename) {
+  const ext = path2.extname(filename).toLowerCase();
+  const mimeTypes = {
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".png": "image/png",
+    ".gif": "image/gif",
+    ".webp": "image/webp"
+  };
+  return mimeTypes[ext] || "application/octet-stream";
+}
+router5.get("/debug", (req, res) => {
+  const debugInfo = {
+    cwd: process.cwd(),
+    __dirname: __dirname2,
+    paths: {
+      uploadsFromCwd: path2.join(process.cwd(), "uploads"),
+      uploadsFromDirname: path2.join(__dirname2, "../uploads"),
+      absolutePath: "D:\\Code\\Cadimar-nextjs\\cadimar-landingpage-next\\uploads"
+    },
+    exists: {},
+    contents: {}
+  };
+  Object.entries(debugInfo.paths).forEach(([key, testPath]) => {
+    debugInfo.exists[key] = fs.existsSync(testPath);
+    if (fs.existsSync(testPath)) {
+      try {
+        debugInfo.contents[key] = fs.readdirSync(testPath);
+      } catch (error) {
+        debugInfo.contents[key] = `Error reading: ${error.message}`;
+      }
+    }
+  });
+  res.json(debugInfo);
+});
+router5.get("/test-files", (req, res) => {
+  const testPaths = [
+    "D:\\Code\\Cadimar-nextjs\\cadimar-landingpage-next\\uploads\\blog",
+    "D:\\Code\\Cadimar-nextjs\\cadimar-landingpage-next\\uploads\\avatars",
+    path2.join(process.cwd(), "uploads", "blog"),
+    path2.join(process.cwd(), "uploads", "avatars"),
+    path2.join(__dirname2, "..", "uploads", "blog"),
+    path2.join(__dirname2, "..", "uploads", "avatars")
+  ];
+  const results = {};
+  testPaths.forEach((testPath) => {
+    try {
+      if (fs.existsSync(testPath)) {
+        const files = fs.readdirSync(testPath);
+        results[testPath] = {
+          exists: true,
+          files,
+          count: files.length
+        };
+      } else {
+        results[testPath] = {
+          exists: false,
+          files: [],
+          count: 0
+        };
+      }
+    } catch (error) {
+      results[testPath] = {
+        exists: false,
+        error: error.message,
+        files: [],
+        count: 0
+      };
+    }
+  });
+  res.json({
+    success: true,
+    cwd: process.cwd(),
+    __dirname: __dirname2,
+    results
+  });
 });
 router5.get("/test", (req, res) => {
   res.json({
@@ -1468,7 +1794,9 @@ app.use(cors({
 }));
 app.use(express6.json({ limit: "10mb" }));
 app.use(express6.urlencoded({ extended: true, limit: "10mb" }));
-app.use("/uploads", express6.static(path3.join(__dirname3, "uploads")));
+var uploadsPath = process.env.UPLOADS_PATH || path3.join(__dirname3, "../uploads");
+console.log("\u{1F4C1} Uploads path:", uploadsPath);
+app.use("/uploads", express6.static(uploadsPath));
 app.get("/health", (req, res) => {
   res.json({
     status: "OK",

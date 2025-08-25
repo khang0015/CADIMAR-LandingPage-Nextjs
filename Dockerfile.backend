@@ -31,14 +31,11 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/backend ./backend
 COPY --from=builder /app/package.json ./package.json
 
-# Copy uploads folder with existing images
-COPY --from=builder /app/backend/uploads ./backend/uploads
-
 # Install tsx in production
 RUN npm install -g tsx
 
-# Ensure uploads directory has correct permissions
-RUN chown -R backend:nodejs backend/uploads
+# Create uploads directory for volume mount
+RUN mkdir -p /app/uploads && chown -R backend:nodejs /app/uploads
 
 USER backend
 
